@@ -1,0 +1,398 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>无标题文档</title>
+<style type="text/css">
+<!--
+body {
+	background-color: #000000;
+}
+#Layer1 {
+	position:absolute;
+	width:330px;
+	height:260px;
+	z-index:2;
+	left: 625px;
+	top: 259px;
+	background-color: #333333;
+}
+.STYLE1 {color: #FFFFFF}
+#Layer2 {
+	position:absolute;
+	width:330px;
+	height:206px;
+	z-index:2;
+	left: 2px;
+	top: -263px;
+	overflow: visible;
+}
+#Layer3 {
+	position:absolute;
+	width:300px;
+	height:240px;
+	z-index:3;
+	left: 840px;
+	top: 214px;
+}
+.STYLE2 {color: #FFFF00}
+#Layer4 {
+	position:absolute;
+	width:300px;
+	height:222px;
+	z-index:1;
+}
+#Layer5 {
+	position:absolute;
+	width:112px;
+	height:39px;
+	z-index:3;
+	left: 38px;
+	top: 296px;
+}
+#Layer6 {
+	position:absolute;
+	width:112px;
+	height:39px;
+	z-index:4;
+	left: 38px;
+	top: 375px;
+}
+#Layer7 {
+	position:absolute;
+	width:112px;
+	height:39px;
+	z-index:5;
+	left: 38px;
+	top: 335px;
+}
+#Layer8 {
+	position:absolute;
+	width:112px;
+	height:39px;
+	z-index:6;
+	left: 38px;
+	top: 257px;
+}
+#Layer9 {
+	position:absolute;
+	width:112px;
+	height:39px;
+	z-index:7;
+	left: 53px;
+	top: 150px;
+}
+#Layer10 {
+	position:absolute;
+	width:200px;
+	height:115px;
+	z-index:3;
+	left: 200px;
+	top: 370px;
+}
+#Layer11 {
+	position:absolute;
+	width:80px;
+	height:32px;
+	z-index:4;
+	left: 238px;
+	top: 293px;
+	visibility: hidden;
+}
+#Layer12 {
+	position:absolute;
+	width:76px;
+	height:41px;
+	z-index:5;
+	left: 237px;
+	top: 399px;
+	visibility: hidden;
+}
+#Layer13 {
+	position:absolute;
+	width:66px;
+	height:58px;
+	z-index:1;
+	left: 237px;
+	top: 450px;
+	visibility: hidden;
+}
+#Layer14 {
+	position:absolute;
+	width:90px;
+	height:58px;
+	z-index:6;
+	left: 552px;
+	top: 333px;
+	visibility: hidden;
+}
+a {
+	font-size: 14px;
+	color: #FFFF00;
+}
+a:link {
+	text-decoration: none;
+}
+a:visited {
+	text-decoration: none;
+	color: #FFFF00;
+}
+a:hover {
+	text-decoration: underline;
+	color: #FE007F;
+}
+a:active {
+	text-decoration: none;
+}
+#Layer15 {
+	position:absolute;
+	width:200px;
+	height:115px;
+	z-index:7;
+	left: 313px;
+	top: 240px;
+}
+-->
+</style>
+<script type="text/JavaScript">
+<!--
+function MM_timelineGoto(tmLnName, fNew, numGotos) { //v2.0
+  //Copyright 1998, 1999, 2000, 2001, 2002, 2003, 2004 Macromedia, Inc. All rights reserved.
+  var i,j,tmLn,props,keyFrm,sprite,numKeyFr,firstKeyFr,lastKeyFr,propNum,theObj;
+  if (document.MM_Time == null) MM_initTimelines(); //if *very* 1st time
+  tmLn = document.MM_Time[tmLnName];
+  if (numGotos != null)
+    if (tmLn.gotoCount == null) tmLn.gotoCount = 1;
+    else if (tmLn.gotoCount++ >= numGotos) {tmLn.gotoCount=0; return}
+  jmpFwd = (fNew > tmLn.curFrame);
+  for (i = 0; i < tmLn.length; i++) {
+    sprite = (jmpFwd)? tmLn[i] : tmLn[(tmLn.length-1)-i]; //count bkwds if jumping back
+    if (sprite.charAt(0) == "s") {
+      numKeyFr = sprite.keyFrames.length;
+      firstKeyFr = sprite.keyFrames[0];
+      lastKeyFr = sprite.keyFrames[numKeyFr - 1];
+      if ((jmpFwd && fNew<firstKeyFr) || (!jmpFwd && lastKeyFr<fNew)) continue; //skip if untouchd
+      for (keyFrm=1; keyFrm<numKeyFr && fNew>=sprite.keyFrames[keyFrm]; keyFrm++);
+      for (j=0; j<sprite.values.length; j++) {
+        props = sprite.values[j];
+        if (numKeyFr == props.length) propNum = keyFrm-1 //keyframes only
+        else propNum = Math.min(Math.max(0,fNew-firstKeyFr),props.length-1); //or keep in legal range
+        if (sprite.obj != null) {
+          if (props.prop2 == null) sprite.obj[props.prop] = props[propNum];
+          else        sprite.obj[props.prop2][props.prop] = props[propNum];
+      } }
+    } else if (sprite.charAt(0)=='b' && fNew == sprite.frame) eval(sprite.value);
+  }
+  tmLn.curFrame = fNew;
+  if (tmLn.ID == 0) eval('MM_timelinePlay(tmLnName)');
+}
+
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_setTextOfLayer(objName,x,newText) { //v4.01
+  if ((obj=MM_findObj(objName))!=null) with (obj)
+    if (document.layers) {document.write(unescape(newText)); document.close();}
+    else innerHTML = unescape(newText);
+}
+
+function MM_timelinePlay(tmLnName, myID) { //v1.2
+  //Copyright 1998, 1999, 2000, 2001, 2002, 2003, 2004 Macromedia, Inc. All rights reserved.
+  var i,j,tmLn,props,keyFrm,sprite,numKeyFr,firstKeyFr,propNum,theObj,firstTime=false;
+  if (document.MM_Time == null) MM_initTimelines(); //if *very* 1st time
+  tmLn = document.MM_Time[tmLnName];
+  if (myID == null) { myID = ++tmLn.ID; firstTime=true;}//if new call, incr ID
+  if (myID == tmLn.ID) { //if Im newest
+    setTimeout('MM_timelinePlay("'+tmLnName+'",'+myID+')',tmLn.delay);
+    fNew = ++tmLn.curFrame;
+    for (i=0; i<tmLn.length; i++) {
+      sprite = tmLn[i];
+      if (sprite.charAt(0) == 's') {
+        if (sprite.obj) {
+          numKeyFr = sprite.keyFrames.length; firstKeyFr = sprite.keyFrames[0];
+          if (fNew >= firstKeyFr && fNew <= sprite.keyFrames[numKeyFr-1]) {//in range
+            keyFrm=1;
+            for (j=0; j<sprite.values.length; j++) {
+              props = sprite.values[j]; 
+              if (numKeyFr != props.length) {
+                if (props.prop2 == null) sprite.obj[props.prop] = props[fNew-firstKeyFr];
+                else        sprite.obj[props.prop2][props.prop] = props[fNew-firstKeyFr];
+              } else {
+                while (keyFrm<numKeyFr && fNew>=sprite.keyFrames[keyFrm]) keyFrm++;
+                if (firstTime || fNew==sprite.keyFrames[keyFrm-1]) {
+                  if (props.prop2 == null) sprite.obj[props.prop] = props[keyFrm-1];
+                  else        sprite.obj[props.prop2][props.prop] = props[keyFrm-1];
+        } } } } }
+      } else if (sprite.charAt(0)=='b' && fNew == sprite.frame) eval(sprite.value);
+      if (fNew > tmLn.lastFrame) tmLn.ID = 0;
+  } }
+}
+
+function MM_showHideLayers() { //v6.0
+  var i,p,v,obj,args=MM_showHideLayers.arguments;
+  for (i=0; i<(args.length-2); i+=3) if ((obj=MM_findObj(args[i]))!=null) { v=args[i+2];
+    if (obj.style) { obj=obj.style; v=(v=='show')?'visible':(v=='hide')?'hidden':v; }
+    obj.visibility=v; }
+}
+
+function MM_initTimelines() { //v4.0
+    //MM_initTimelines() Copyright 1997 Macromedia, Inc. All rights reserved.
+    var ns = navigator.appName == "Netscape";
+    var ns4 = (ns && parseInt(navigator.appVersion) == 4);
+    var ns5 = (ns && parseInt(navigator.appVersion) > 4);
+    var macIE5 = (navigator.platform ? (navigator.platform == "MacPPC") : false) && (navigator.appName == "Microsoft Internet Explorer") && (parseInt(navigator.appVersion) >= 4);
+    document.MM_Time = new Array(1);
+    document.MM_Time[0] = new Array(2);
+    document.MM_Time["Timeline1"] = document.MM_Time[0];
+    document.MM_Time[0].MM_Name = "Timeline1";
+    document.MM_Time[0].fps = 3;
+    document.MM_Time[0][0] = new String("behavior");
+    document.MM_Time[0][0].frame = 16;
+    document.MM_Time[0][0].value = "MM_timelineGoto('Timeline1','1')";
+    document.MM_Time[0][1] = new String("sprite");
+    document.MM_Time[0][1].slot = 1;
+    if (ns4)
+        document.MM_Time[0][1].obj = document["Layer1"] ? document["Layer1"].document["Layer2"] : document["Layer2"];
+    else if (ns5)
+        document.MM_Time[0][1].obj = document.getElementById("Layer2");
+    else
+        document.MM_Time[0][1].obj = document.all ? document.all["Layer2"] : null;
+    document.MM_Time[0][1].keyFrames = new Array(1, 15);
+    document.MM_Time[0][1].values = new Array(2);
+    if (ns5 || macIE5)
+        document.MM_Time[0][1].values[0] = new Array("0px", "0px", "0px", "0px", "0px", "0px", "0px", "0px", "0px", "0px", "0px", "0px", "0px", "0px", "0px");
+    else
+        document.MM_Time[0][1].values[0] = new Array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+    document.MM_Time[0][1].values[0].prop = "left";
+    if (ns5 || macIE5)
+        document.MM_Time[0][1].values[1] = new Array("258px", "218px", "178px", "139px", "99px", "59px", "19px", "-21px", "-60px", "-100px", "-140px", "-180px", "-219px", "-259px", "-299px");
+    else
+        document.MM_Time[0][1].values[1] = new Array(258,218,178,139,99,59,19,-21,-60,-100,-140,-180,-219,-259,-299);
+    document.MM_Time[0][1].values[1].prop = "top";
+    if (!ns4) {
+        document.MM_Time[0][1].values[0].prop2 = "style";
+        document.MM_Time[0][1].values[1].prop2 = "style";
+    }
+    document.MM_Time[0].lastFrame = 16;
+    for (i=0; i<document.MM_Time.length; i++) {
+        document.MM_Time[i].ID = null;
+        document.MM_Time[i].curFrame = 0;
+        document.MM_Time[i].delay = 1000/document.MM_Time[i].fps;
+    }
+}
+//-->
+</script>
+</head>
+
+<body onload="MM_timelinePlay('Timeline1')" >
+<div id="Layer14">
+  <table border="0">
+    <tr>
+      <td width="86"><p><a href="#">风光摄影</a></p></td>
+    </tr>
+    <tr>
+      <td><p><a href="#">新闻摄影</a></p></td>
+    </tr>
+    <tr>
+      <td><p><a href="#">建筑摄影</a></p></td>
+    </tr>
+  </table>
+</div>
+<div id="Layer13">
+  <table>
+    <tr>
+      <td><p><a href="#">赫尔穆特</a></p></td>
+    </tr>
+    <tr>
+      <td><p><a href="#">赫尔穆特</a></p></td>
+    </tr>
+    <tr>
+      <td><p><a href="#">朱宪民 </a></p></td>
+    </tr>
+  </table>
+</div>
+<table width="900" height="158" border="0" align="center" class="bcground">
+  <tr>
+    <td width="247" height="154" align="center" valign="middle"><img src="images/logo.jpg" width="167" height="110" /></td>
+    <td width="637"><object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,19,0" width="620" height="145" title="ph">
+      <param name="movie" value="images/photograph.swf" />
+      <param name="quality" value="high" />
+      <param name="SCALE" value="noborder" />
+      <embed src="images/photograph.swf" width="620" height="145" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" scale="noborder"></embed>
+    </object></td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table width="950" border="0" align="center">
+  <tr>
+    <td width="162" height="412"><div id="Layer15">
+      <table width="112" border="0" align="right" cellspacing="10">
+        <tr>
+          <td><img src="images/menu0.gif" alt="1" width="112" height="39" /></td>
+        </tr>
+        <tr>
+          <td><img src="images/menu1.gif" alt="1" width="112" height="39" onmouseover="MM_showHideLayers('Layer11','','show')" onmouseout="MM_showHideLayers('Layer11','','hide')" /></td>
+        </tr>
+        <tr>
+          <td><img src="images/menu2.gif" alt="1" width="112" height="39" onmouseover="MM_showHideLayers('Layer14','','show')" onmouseout="MM_showHideLayers('Layer14','','hide')" /></td>
+        </tr>
+        <tr>
+          <td><img src="images/menu3.gif" alt="1" width="112" height="39" onmouseover="MM_showHideLayers('Layer12','','show')" onmouseout="MM_showHideLayers('Layer12','','hide')" /></td>
+        </tr>
+        <tr>
+          <td height="41"><img src="images/menu4.gif" alt="1" width="112" height="39" onmouseover="MM_showHideLayers('Layer13','','show')" onmouseout="MM_showHideLayers('Layer13','','hide')" /></td>
+        </tr>
+      </table>
+    </div></td>
+    <td width="83"><div id="Layer11">
+      <table border="0">
+        <tr>
+          <td><p><a href="#">摄影中国史</a></p></td>
+        </tr>
+        <tr>
+          <td><p><a href="#">摄影风格史</a></p></td>
+        </tr>
+      </table>
+    </div>
+    <div id="Layer12">
+      <table border="0">
+        <tr>
+          <td width="72"><p><a href="#">构图技巧</a></p></td>
+        </tr>
+        <tr>
+          <td><p><a href="#">用光技巧</a></p></td>
+        </tr>
+      </table>
+    </div></td>
+    <td width="554"><div id="Layer1">
+      <p class="STYLE1">&nbsp;</p>
+      <div id="Layer2" style="top: 258px; left: 0px;"><br />
+          <p>中国摄影历史年表（1902—1999）</p>
+        <p>1902年，梁启超在日本横滨创办的《新民丛报》使用照片，是中文刊物刊登新闻照片之始。</p>
+        <p> 1903年，天津“工艺学堂”最早传授照相技术。</p>
+        <p> 1906年，北京《京话日报》刊登南昌教案中江召棠遗体颈部照片，揭露法国传教士恶行，为中国报纸运用新闻照片之始。</p>
+        <p> 1907年，广东周耀先《实用映相学》出版，介绍手提轻便照相机的知识，传播纪实摄影的意义与价值。</p>
+        <p> 1912年，上海创办《真相画报》旬刊，每期刊用时事照片最多达37幅，是中国大型画报之先驱。</p>
+        <p> 1915～1916年，中国成立第一个民间摄影团体“精武体育会摄学部”。</p>
+      </div>
+    </div></td>
+    <td width="133"><div id="Layer3">
+      <table width="300" border="0">
+        <tr>
+          <td><div align="center"><span class="STYLE2" onmouseover="MM_setTextOfLayer('Layer4','','&lt;img src=&quot;images/fengguang.jpg&quot;&gt;')">风光摄影</span></div></td>
+          <td><div align="center"><span class="STYLE2" onmouseover="MM_setTextOfLayer('Layer4','','&lt;img src=&quot;images/dibai.jpg&quot;&gt;')">建筑摄影</span></div></td>
+          <td><div align="center"><span class="STYLE2" onmouseover="MM_setTextOfLayer('Layer4','','&lt;img src=&quot;images/xinwen.jpg&quot;&gt;')">新闻摄影</span></div></td>
+          <td><div align="center"><span class="STYLE2" onmouseover="MM_setTextOfLayer('Layer4','','&lt;img src=&quot;images/yejing.jpg&quot; &gt;\n')">夜景摄影</span></div></td>
+        </tr>
+      </table>
+      <div id="Layer4"></div>
+    </div></td>
+  </tr>
+</table>
+</body>
+</html>
