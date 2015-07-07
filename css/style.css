@@ -26,15 +26,15 @@
 #img1
 {
 	position:relative;
-	left : -180px;
+	left : 10%;
 	top : 0px;
 }
 	
 #img2
 {
 	position:relative;
-	left : -220px;
-	top : -150px;
+	left : -13%;
+	top : -50%;
 }
 #PageBody
 {
@@ -45,6 +45,7 @@
 #MainBody
 {
 	width:60%;
+	float: left;
 }
 a:link,a:visited 
 {
@@ -55,6 +56,7 @@ a:link,a:visited
 a:hover{}
 #menu
 {
+	display: block;
 	padding:20px 20px 0 0;
 	top : 180px;
 	left : 50px;
@@ -131,12 +133,12 @@ a:hover{}
 {
 	width:100%;
 	margin:40px 10px;
-	padding : 0px 20px;
+	padding : 5px 20px;
 	background-image: url("../img/1230.jpg");
 	filter:"progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')"; 
 	-moz-background-size:100% 100%; 
 	background-size:100% 100%;
-	float:left;
+	
 }
 
 #footer
