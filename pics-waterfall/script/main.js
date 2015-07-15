@@ -84,7 +84,7 @@ function myAfaxFunction()
 }
 function CommentAfaxFunction(pID, PageNum)
 {
-	loadXMLDoc("/json/Comment" + pID + "and" + PageNum + ".json",function()
+	loadXMLDoc("json/Comment" + pID + "and" + PageNum + ".json",function()
 	{
 		if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
