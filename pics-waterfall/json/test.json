@@ -1,0 +1,151 @@
+[{ "name" : "Image1", "url" : "images/1.jpg", "Height": 780, "Width": 595,
+"PageSum": 7, "jingdu": -179.55, "weidu": 11.4454
+}, 
+{ "name" : "Image2", "url" : "images/2.jpg", "Height": 1080, "Width": 720,
+"PageSum": 1, "jingdu": 7.15781, "weidu": -35.649
+}, 
+{ "name" : "Image3", "url" : "images/3.jpg", "Height": 2263, "Width": 1600,
+"PageSum": 3, "jingdu": -128.758, "weidu": -6.82546
+}, 
+{ "name" : "Image4", "url" : "images/4.jpg", "Height": 2262, "Width": 1600,
+"PageSum": 9, "jingdu": -44.6883, "weidu": -73.3277
+}, 
+{ "name" : "Image5", "url" : "images/5.jpg", "Height": 1050, "Width": 1421,
+"PageSum": 6, "jingdu": 69.4412, "weidu": -35.4512
+}, 
+{ "name" : "Image6", "url" : "images/6.jpg", "Height": 1026, "Width": 730,
+"PageSum": 9, "jingdu": -142.316, "weidu": 80.8811
+}, 
+{ "name" : "Image7", "url" : "images/7.jpg", "Height": 1600, "Width": 1600,
+"PageSum": 1, "jingdu": -89.0194, "weidu": -63.9946
+}, 
+{ "name" : "Image8", "url" : "images/8.jpg", "Height": 540, "Width": 360,
+"PageSum": 4, "jingdu": -138.383, "weidu": 9.57762
+}, 
+{ "name" : "Image9", "url" : "images/9.jpg", "Height": 1014, "Width": 1433,
+"PageSum": 5, "jingdu": 70.474, "weidu": 76.4644
+}, 
+{ "name" : "Image10", "url" : "images/10.jpg", "Height": 884, "Width": 654,
+"PageSum": 8, "jingdu": 44.919, "weidu": 39.7635
+}, 
+{ "name" : "Image11", "url" : "images/11.jpg", "Height": 2261, "Width": 1600,
+"PageSum": 3, "jingdu": 50.7529, "weidu": 57.6003
+}, 
+{ "name" : "Image12", "url" : "images/12.jpg", "Height": 700, "Width": 498,
+"PageSum": 7, "jingdu": 81.0102, "weidu": -35.9896
+}, 
+{ "name" : "Image13", "url" : "images/13.jpg", "Height": 1018, "Width": 720,
+"PageSum": 7, "jingdu": -3.05979, "weidu": 44.5207
+}, 
+{ "name" : "Image14", "url" : "images/14.jpg", "Height": 800, "Width": 1280,
+"PageSum": 8, "jingdu": 57.9601, "weidu": 54.4307
+}, 
+{ "name" : "Image15", "url" : "images/15.jpg", "Height": 2262, "Width": 1600,
+"PageSum": 1, "jingdu": 140.953, "weidu": -48.1024
+}, 
+{ "name" : "Image16", "url" : "images/16.jpg", "Height": 2262, "Width": 1600,
+"PageSum": 5, "jingdu": -163.048, "weidu": -79.4308
+}, 
+{ "name" : "Image17", "url" : "images/17.jpg", "Height": 2263, "Width": 1600,
+"PageSum": 4, "jingdu": 103.016, "weidu": 13.802
+}, 
+{ "name" : "Image18", "url" : "images/18.jpg", "Height": 1654, "Width": 1169,
+"PageSum": 4, "jingdu": -168.816, "weidu": 66.3622
+}, 
+{ "name" : "Image19", "url" : "images/19.jpg", "Height": 2262, "Width": 1600,
+"PageSum": 6, "jingdu": -20.979, "weidu": -75.58
+}, 
+{ "name" : "Image20", "url" : "images/20.jpg", "Height": 800, "Width": 600,
+"PageSum": 3, "jingdu": -125.726, "weidu": 24.5415
+}, 
+{ "name" : "Image21", "url" : "images/21.jpg", "Height": 1701, "Width": 1134,
+"PageSum": 6, "jingdu": 32.6688, "weidu": -77.2335
+}, 
+{ "name" : "Image22", "url" : "images/22.jpg", "Height": 540, "Width": 405,
+"PageSum": 5, "jingdu": 142.579, "weidu": -19.158
+}, 
+{ "name" : "Image23", "url" : "images/23.jpg", "Height": 1018, "Width": 720,
+"PageSum": 7, "jingdu": -147.447, "weidu": -75.6789
+}, 
+{ "name" : "Image24", "url" : "images/24.jpg", "Height": 2262, "Width": 1600,
+"PageSum": 3, "jingdu": -5.5208, "weidu": -88.352
+}, 
+{ "name" : "Image25", "url" : "images/25.jpg", "Height": 2262, "Width": 1600,
+"PageSum": 5, "jingdu": -77.6812, "weidu": -85.1933
+}, 
+{ "name" : "Image26", "url" : "images/26.jpg", "Height": 2142, "Width": 1600,
+"PageSum": 2, "jingdu": -83.7678, "weidu": -28.5186
+}, 
+{ "name" : "Image27", "url" : "images/27.jpg", "Height": 2280, "Width": 1600,
+"PageSum": 10, "jingdu": 141.821, "weidu": -57.0565
+}, 
+{ "name" : "Image28", "url" : "images/28.jpg", "Height": 1131, "Width": 1600,
+"PageSum": 5, "jingdu": -163.092, "weidu": -88.3355
+}, 
+{ "name" : "Image29", "url" : "images/29.jpg", "Height": 2262, "Width": 1600,
+"PageSum": 5, "jingdu": 126.198, "weidu": -37.2585
+}, 
+{ "name" : "Image30", "url" : "images/30.jpg", "Height": 1131, "Width": 1600,
+"PageSum": 2, "jingdu": -162.553, "weidu": -27.6946
+}, 
+{ "name" : "Image31", "url" : "images/31.jpg", "Height": 2262, "Width": 1600,
+"PageSum": 10, "jingdu": 55.4442, "weidu": 50.7392
+}, 
+{ "name" : "Image32", "url" : "images/32.jpg", "Height": 2262, "Width": 1600,
+"PageSum": 2, "jingdu": 158.543, "weidu": -57.073
+}, 
+{ "name" : "Image33", "url" : "images/33.jpg", "Height": 2262, "Width": 1600,
+"PageSum": 6, "jingdu": 20.2869, "weidu": 8.00653
+}, 
+{ "name" : "Image34", "url" : "images/34.jpg", "Height": 2262, "Width": 1600,
+"PageSum": 2, "jingdu": 51.5989, "weidu": 27.1068
+}, 
+{ "name" : "Image35", "url" : "images/35.jpg", "Height": 2262, "Width": 1600,
+"PageSum": 10, "jingdu": -140.876, "weidu": 66.4995
+}, 
+{ "name" : "Image36", "url" : "images/36.jpg", "Height": 3825, "Width": 720,
+"PageSum": 3, "jingdu": -158.532, "weidu": -1.63976
+}, 
+{ "name" : "Image37", "url" : "images/37.jpg", "Height": 2262, "Width": 1600,
+"PageSum": 7, "jingdu": -171.343, "weidu": 41.7136
+}, 
+{ "name" : "Image38", "url" : "images/38.jpg", "Height": 1654, "Width": 1169,
+"PageSum": 3, "jingdu": -163.212, "weidu": 56.5566
+}, 
+{ "name" : "Image39", "url" : "images/39.jpg", "Height": 2262, "Width": 1600,
+"PageSum": 4, "jingdu": -113.377, "weidu": 71.0041
+}, 
+{ "name" : "Image40", "url" : "images/40.jpg", "Height": 1113, "Width": 1600,
+"PageSum": 3, "jingdu": 52.2141, "weidu": 56.2874
+}, 
+{ "name" : "Image41", "url" : "images/41.jpg", "Height": 2249, "Width": 1600,
+"PageSum": 5, "jingdu": 0.60976, "weidu": -46.2841
+}, 
+{ "name" : "Image42", "url" : "images/42.jpg", "Height": 1697, "Width": 1200,
+"PageSum": 10, "jingdu": -107.466, "weidu": 79.2331
+}, 
+{ "name" : "Image43", "url" : "images/43.jpg", "Height": 2263, "Width": 1600,
+"PageSum": 2, "jingdu": -34.6025, "weidu": -20.9488
+}, 
+{ "name" : "Image44", "url" : "images/44.jpg", "Height": 2262, "Width": 1600,
+"PageSum": 5, "jingdu": 11.926, "weidu": -88.1872
+}, 
+{ "name" : "Image45", "url" : "images/45.jpg", "Height": 2262, "Width": 1600,
+"PageSum": 1, "jingdu": 31.8339, "weidu": -51.0797
+}, 
+{ "name" : "Image46", "url" : "images/46.jpg", "Height": 673, "Width": 1417,
+"PageSum": 10, "jingdu": -71.4957, "weidu": 40.8841
+}, 
+{ "name" : "Image47", "url" : "images/47.jpg", "Height": 2844, "Width": 1600,
+"PageSum": 5, "jingdu": -130.999, "weidu": -87.3962
+}, 
+{ "name" : "Image48", "url" : "images/48.jpg", "Height": 620, "Width": 436,
+"PageSum": 1, "jingdu": -50.8078, "weidu": 55.2107
+}, 
+{ "name" : "Image49", "url" : "images/49.jpg", "Height": 1079, "Width": 720,
+"PageSum": 4, "jingdu": -90.2829, "weidu": 12.7253
+}, 
+{ "name" : "Image50", "url" : "images/50.jpg", "Height": 620, "Width": 436,
+"PageSum": 2, "jingdu": 161.806, "weidu": 86.7864
+}, 
+] 

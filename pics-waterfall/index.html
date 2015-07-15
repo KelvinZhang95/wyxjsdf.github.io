@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+	<title> 王小寒在秀恩爱网 </title>
+	<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<script src = "script/main.js"> </script>
+	<script src = "script/test2.1.2.1.js"> </script>
+</head>
+
+<body>
+	<div id = "header">
+		王小寒在秀恩爱网
+	</div>
+	<div id = "main">
+		<div class = "list" id = "div1">
+		</div>
+		<div class = "list" id = "div2">
+		</div>
+		<div class = "list" id = "div3">
+		</div>
+		<div class = "list" id = "div4">
+		</div>
+	</div>
+	<div id = "shadow"></div>
+	<div id = "AllPre"> 
+	<div id = "PlaceBigPicture"> <img id = "BigPic" /> </div>
+	<div id = "PlaceComment"><h1>评论</h1> <div id = "CommentBlock"></div></div>
+	</div>
+	
+</body>
+<script>
+	var img = new Image();
+	img.src = "images/loading.gif";
+	img.onload = function(){
+	myAfaxFunction();
+	var pp = createObject();
+	pp.init({RightDown:true});
+	}
+</script>
+</html>
