@@ -69,7 +69,7 @@ function loadXMLDoc(url,cfunc)
 
 function myAfaxFunction()
 {
-	loadXMLDoc("/json/test.jsonp",function()
+	loadXMLDoc("/json/test.json",function()
 	{
 		if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
