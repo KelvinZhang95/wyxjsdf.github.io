@@ -63,7 +63,7 @@ function loadXMLDoc(url,cfunc)
 		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
 	}
 	xmlhttp.onreadystatechange = cfunc;
-	xmlhttp.open("POST" ,url ,true);
+	xmlhttp.open("GET" ,url ,true);
 	xmlhttp.send();
 }
 
