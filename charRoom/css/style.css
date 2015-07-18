@@ -1,0 +1,139 @@
+body
+{
+	width:900px;
+	height:540px;
+	top:20px;
+	position:relative;
+	margin:0 auto;
+}
+#chatRoom
+{
+	width:100%;
+	height:100%;
+	background-color:#EFF6EA;
+	box-shadow: 0px 1px 3px #555555;
+	-webkit-border-radius: 1em;
+	-moz-border-radius: 1em;
+	border-radius: 1em;	
+}
+#header
+{
+	margin:0 auto;
+	height:88px;
+	text-align:center;
+	border-bottom:1px solid #DCE2D7;
+}
+#header p
+{
+	position:relative;
+	top:20px;
+	font-family:Microsoft YaHei;
+	font-size:30px;
+}
+#main
+{
+	overflow:hidden;
+}
+#messagesDiv
+{
+	width:600px;
+	height:452px;
+	border-right:1px solid #DCE2D7;
+	float:left;
+}
+#userList
+{
+	width:299px;
+	height:452px;
+	float:left;
+}
+#messageBox
+{
+	overflow-y:scroll;
+	height:300px;
+	border-bottom:1px solid #DCE2D7;
+}
+#inputMessage
+{
+	font-size:20px;
+	position:relative;
+	left:5px;
+	margin:0 auto;
+	background-color:#EFF6EA;
+	border:none;
+	outline:none;
+	height:100px;
+	resize:none;
+	width:98%;
+	word-wrap: break-word;
+    word-break: break-all;
+}
+.nickname
+{
+	font-family:Microsoft YaHei;
+	font-size:20px;
+	float:left;
+	margin:0px 10px;
+	display:inline;
+}
+#buttonBox
+{
+	height:40px;
+}
+#button2
+{
+	float:right;
+	margin:0px 10px;
+}
+#button1
+{
+	float : left;
+}
+#userTitle
+{
+	padding: 6px;
+	font-family:Microsoft YaHei;
+	font-size:15px;
+	background-color:#E2EFD6
+}
+.nameList
+{
+	font-family:Microsoft YaHei;
+	font-size:14px;
+	margin:5px 15px;
+}
+.oneMessage
+{
+	margin:20px 5px;
+	display:block;
+	overflow:hidden;
+}
+.oneName
+{
+	font-weight:bold;
+	width:70px;
+	display:block;
+}
+.oneContent
+{
+	margin-top : 10px;
+	margin-left: 20px;
+	word-wrap: break-word;
+    word-break: break-all;
+	display:block;
+}
+.oneContentText
+{
+    float:left;
+    color:#FFF;
+    display:inline-block;
+    *display:inline;
+	zoom:1;
+    padding:5px 10px;
+    border:1px solid #3079ED;
+    border-radius:5px;
+    background-color: #4D90FE;
+	background-image:-moz-linear-gradient(#fff,#4D90FE);
+	background-image:-moz-linear-gradient(30deg,#4D90FE,#fff %75,#4D90FE);
+	
+}
