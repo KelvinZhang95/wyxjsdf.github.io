@@ -83,6 +83,7 @@ function changeNickName()										//修改昵称
 			}
 			nickName = aText;
 			$('.nickWait').text(nickName);
+			$('#inputMessage').focus();
 			return 0;
 		}
 	});
