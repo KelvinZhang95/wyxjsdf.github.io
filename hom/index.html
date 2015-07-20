@@ -13,54 +13,63 @@
 <canvas id="myCanvas" width="1200" height="600" style="border: 10px blue solid; margin:0 auto" >
 </canvas>
 </div>
+<script src='scripts/painting.js'></script>
 <script>
-var actionFlash = [{len:0},{len:6},{len:6},{len:6},{len:6},{len:6},{len:6},{len:4},{len:4},{len:0},{len:0}, {len:2},{len:2},{len:2},{len:2}];
+var actionFlash = [{len:0,kind:0},{len:6,kind:1},{len:6,kind:1},{len:6,kind:2},{len:6,kind:2},{len:6,kind:1},{len:6,kind:1},{len:4,kind:2},{len:4,kind:2},{len:0,kind:0},{len:0,kind:0}, {len:1,kind:1},{len:1,kind:1},{len:1,kind:2},{len:1,kind:2}];
 var allPicSrc= [];
 	for (var i = 0; i < 6; i++)
-		allPicSrc.push('images/fighter/fighter_run_l/' + 'Frame' + i + 'png');
+		allPicSrc.push('images/fighter/fighter_run_l/' + 'Frame' + i + '.png');
 	for (var i = 0; i < 6; i++)
-		allPicSrc.push('images/fighter/fighter_run_r/' + 'Frame' + i + 'png');
+		allPicSrc.push('images/fighter/fighter_run_r/' + 'Frame' + i + '.png');
 	for (var i = 0; i < 6; i++)
-		allPicSrc.push('images/xiaobing/xiaobing_run_l/blue/' + 'Frame' + i + 'png');
+		allPicSrc.push('images/xiaobing/xiaobing_run_l/blue/' + 'Frame' + i + '.png');
 	for (var i = 0; i < 6; i++)
-		allPicSrc.push('images/xiaobing/xiaobing_run_l/red/' + 'Frame' + i + 'png');
+		allPicSrc.push('images/xiaobing/xiaobing_run_l/red/' + 'Frame' + i + '.png');
 	for (var i = 0; i < 6; i++)
-		allPicSrc.push('images/xiaobing/xiaobing_run_r/blue/' + 'Frame' + i + 'png');
+		allPicSrc.push('images/xiaobing/xiaobing_run_r/blue/' + 'Frame' + i + '.png');
 	for (var i = 0; i < 6; i++)
-		allPicSrc.push('images/xiaobing/xiaobing_run_r/red/' + 'Frame' + i + 'png');
+		allPicSrc.push('images/xiaobing/xiaobing_run_r/red/' + 'Frame' + i + '.png');
 	for (var i = 0; i < 6; i++)
-		allPicSrc.push('images/fighter/fighter_a_l/' + 'Frame' + i + 'png');
+		allPicSrc.push('images/fighter/fighter_a_l/' + 'Frame' + i + '.png');
 	for (var i = 0; i < 6; i++)
-		allPicSrc.push('images/fighter/fighter_a_r/' + 'Frame' + i + 'png');
+		allPicSrc.push('images/fighter/fighter_a_r/' + 'Frame' + i + '.png');
 	for (var i = 0; i < 4; i++)
-		allPicSrc.push('images/xiaobing/xiaobing_a_l/blue/' + 'Frame' + i + 'png');
+		allPicSrc.push('images/xiaobing/xiaobing_a_l/blue/' + 'Frame' + i + '.png');
 	for (var i = 0; i < 4; i++)
-		allPicSrc.push('images/xiaobing/xiaobing_a_l/red/' + 'Frame' + i + 'png');
+		allPicSrc.push('images/xiaobing/xiaobing_a_l/red/' + 'Frame' + i + '.png');
 	for (var i = 0; i < 4; i++)
-		allPicSrc.push('images/xiaobing/xiaobing_a_r/blue/' + 'Frame' + i + 'png');
+		allPicSrc.push('images/xiaobing/xiaobing_a_r/blue/' + 'Frame' + i + '.png');
 	for (var i = 0; i < 4; i++)
-		allPicSrc.push('images/xiaobing/xiaobing_a_r/red/' + 'Frame' + i + 'png');
+		allPicSrc.push('images/xiaobing/xiaobing_a_r/red/' + 'Frame' + i + '.png');
 	for (var i = 0; i < 1; i++)
-		allPicSrc.push('images/fighter/fighter_stand_l/' + 'Frame' + i + 'png');
+		allPicSrc.push('images/fighter/fighter_stand_l/' + 'Frame' + i + '.png');
 	for (var i = 0; i < 1; i++)
-		allPicSrc.push('images/fighter/fighter_stand_r/' + 'Frame' + i + 'png');
+		allPicSrc.push('images/fighter/fighter_stand_r/' + 'Frame' + i + '.png');
 	for (var i = 0; i < 1; i++)
-		allPicSrc.push('images/xiaobing/xiaobing_stand_l/blue' + 'Frame' + i + 'png');
+		allPicSrc.push('images/xiaobing/xiaobing_stand_l/blue/' + 'Frame' + i + '.png');
 	for (var i = 0; i < 1; i++)
-		allPicSrc.push('images/xiaobing/xiaobing_stand_l/red' + 'Frame' + i + 'png');
+		allPicSrc.push('images/xiaobing/xiaobing_stand_l/red/' + 'Frame' + i + '.png');
 	for (var i = 0; i < 1; i++)
-		allPicSrc.push('images/xiaobing/xiaobing_stand_r/blue' + 'Frame' + i + 'png');
+		allPicSrc.push('images/xiaobing/xiaobing_stand_r/blue/' + 'Frame' + i + '.png');
 	for (var i = 0; i < 1; i++)
-		allPicSrc.push('images/xiaobing/xiaobing_stand_r/red' + 'Frame' + i + 'png');
-	allPicSrc.push('mappic/home.png');
-	allPicSrc.push('mappic/tower_big.png');
-	allPicSrc.push('mappic/tower_home.png');
-	allPicSrc.push('mappic/background.png');
+		allPicSrc.push('images/xiaobing/xiaobing_stand_r/red/' + 'Frame' + i + '.png');
+	allPicSrc.push('images/mappic/home.png');
+	allPicSrc.push('images/mappic/tower_big.png');
+	allPicSrc.push('images/mappic/tower_home.png');
+	allPicSrc.push('images/mappic/background.png');
 	for (var i = 0; i < allPicSrc.length; i++){
-		var Img = new Image
+		var Img = new Image();
+		Img.src = allPicSrc[i];
 	}
-
+	var sum = 0;
+	for (var i = 0; i < 15 ;i++){
+		actionFlash[i].src = [[],[]];
+			for (var k = 0; k < actionFlash[i].kind; k++){
+				for(var j = 0; j < actionFlash[i].len; j++,sum++)
+					actionFlash[i].src[k].push(allPicSrc[sum]);
+				}
+	}
+	initial();
 </script>
-<script src='scripts/painting.js'></script>
 </body>
 </html>
