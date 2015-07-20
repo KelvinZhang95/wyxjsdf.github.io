@@ -9,13 +9,18 @@
 </head>
 
 <body>
-<div style="margin:0 auto; width : 1220px; height:600px; top:10px; position:relative">
-<canvas id="myCanvas" width="1200" height="600" style="border: 10px blue solid; margin:0 auto" >
+<div style="margin:0 auto; width : 100%; height:600px; top:10px; position:relative;">
+<canvas id="myCanvas" width = "1200" height="600" style="margin:0 auto; display:block; overflow:none" >
 </canvas>
 </div>
 <script src='scripts/painting.js'></script>
+<script src='scripts/jquery-2.1.4.js'></script>
 <script>
-var actionFlash = [{len:0,kind:0},{len:6,kind:1},{len:6,kind:1},{len:6,kind:2},{len:6,kind:2},{len:6,kind:1},{len:6,kind:1},{len:4,kind:2},{len:4,kind:2},{len:0,kind:0},{len:0,kind:0}, {len:1,kind:1},{len:1,kind:1},{len:1,kind:2},{len:1,kind:2}];
+
+var actionFlash = [{len:0,kind:0},{len:6,kind:1},{len:6,kind:1},{len:6,kind:2},{len:6,kind:2},
+				   {len:6,kind:1},{len:6,kind:1},{len:4,kind:2},{len:4,kind:2},{len:0,kind:0},
+				   {len:0,kind:0},{len:1,kind:1},{len:1,kind:1},{len:1,kind:2},{len:1,kind:2},
+				   {len:6,kind:1},{len:6,kind:1},{len:4,kind:2},{len:4,kind:2}];
 var allPicSrc= [];
 	for (var i = 0; i < 6; i++)
 		allPicSrc.push('images/fighter/fighter_run_l/' + 'Frame' + i + '.png');
@@ -53,16 +58,30 @@ var allPicSrc= [];
 		allPicSrc.push('images/xiaobing/xiaobing_stand_r/blue/' + 'Frame' + i + '.png');
 	for (var i = 0; i < 1; i++)
 		allPicSrc.push('images/xiaobing/xiaobing_stand_r/red/' + 'Frame' + i + '.png');
+	for (var i = 0; i < 6; i++)
+		allPicSrc.push('images/fighter/fighter_die_l/' + 'Frame' + i + '.png');
+	for (var i = 0; i < 6; i++)
+		allPicSrc.push('images/fighter/fighter_die_r/' + 'Frame' + i + '.png');
+	for (var i = 0; i < 4; i++)
+		allPicSrc.push('images/xiaobing/xiaobing_die_l/blue/' + 'Frame' + i + '.png');
+	for (var i = 0; i < 4; i++)
+		allPicSrc.push('images/xiaobing/xiaobing_die_l/red/' + 'Frame' + i + '.png');
+	for (var i = 0; i < 4; i++)
+		allPicSrc.push('images/xiaobing/xiaobing_die_r/blue/' + 'Frame' + i + '.png');
+	for (var i = 0; i < 4; i++)
+		allPicSrc.push('images/xiaobing/xiaobing_die_r/red/' + 'Frame' + i + '.png');
 	allPicSrc.push('images/mappic/home.png');
 	allPicSrc.push('images/mappic/tower_big.png');
 	allPicSrc.push('images/mappic/tower_home.png');
 	allPicSrc.push('images/mappic/background.png');
+	allPicSrc.push('images/mappic/tower_big_destroyed.png');
+	allPicSrc.push('images/mappic/tower_home_destroyed.png');
 	for (var i = 0; i < allPicSrc.length; i++){
 		var Img = new Image();
 		Img.src = allPicSrc[i];
 	}
 	var sum = 0;
-	for (var i = 0; i < 15 ;i++){
+	for (var i = 0; i < 19 ;i++){
 		actionFlash[i].src = [[],[]];
 			for (var k = 0; k < actionFlash[i].kind; k++){
 				for(var j = 0; j < actionFlash[i].len; j++,sum++)
