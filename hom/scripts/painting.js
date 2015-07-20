@@ -1,24 +1,24 @@
-//¹ØÓÚaction¶ÔÏóµÄframe²ÎÊıÎªµ±Ç°²¥·Åµ½µÄÖ¡Êı£¬kind²ÎÊıÎªĞĞÎª
-//1¡¢2:Ó¢ĞÛĞĞ×ß(left,right) 3¡¢4:Ğ¡±øĞĞ×ß(left,right) 5¡¢6:Ó¢ĞÛ¹¥»÷(left,right) 7¡¢8:Ğ¡±ø¹¥»÷(left,right) 9:Ëş¹¥»÷ 11¡¢12: Ó¢ĞÛÕ¾Á¢(left,right) 13¡¢14:Ğ¡±øÕ¾Á¢(left,right) 15,16:Ó¢ĞÛËÀÍö 17,18:Ğ¡±øËÀÍö
-var Soldiers = [[],[]];												//ËùÓĞĞ¡±øµÄ¶ÔÏóÊı×é
-var Towers = [[],[]], destroyedTowers =[[],[]];						//ËùÓĞ·ÀÓùËşµÄ¶ÔÏóÊı×é
-var Heroes = [[],[]];												//ËùÓĞÓ¢ĞÛµÄ¶ÔÏóÊı×é
-var baseCamp = [];													//´ó±¾ÓªµÄ¶ÔÏóÊı×é
-var frameTime = 100;												//»­Ãæ²¥·ÅµÄ¼ä¸ô
-var myCanvas = document.getElementById("myCanvas");					//»­²¼CanvasµÄDomÔªËØ
-var allPicLeft = 0;													//ÆÁÄ»Ïà¶ÔÓÒÒÆµÄ¾àÀë
-var screenMoveSpeed = 30, screenMoveflag = 0;						//»­ÃæÒÆ¶¯µÄËÙ¶ÈºÍÅĞ¶¨
-var screenMoveBorder = 20;											//ÏìÓ¦ÒÆ¶¯ÅĞ¶¨µÄ±ß½ç¾àÀë
-var addBloodRadius = 170;											//¿ÉÒÔ»ØÑªµÄ´ó±¾Óª·¶Î§
-var addBloodRate = 0.01;											//µ¥¸ö¼ä¸ôÑªÁ¿Ôö¼ÓµÄ°Ù·Ö±È
-var cxt=myCanvas.getContext("2d");									//»æ»­µÄ¾ä±ú
-var soldierAllHp = 300, soldierAttack = 20;							//Ğ¡±øµÄÑªÁ¿¡¢¹¥»÷Á¦
-var soldierAttackInterval = 1000, soldierSpeed = 10;				//Ğ¡±øµÄ¹¥»÷¼ä¸ô(ms)£¬ÒÆ¶¯ËÙ¶È
-var soldierMakeExp = 50; soldierAttackRadius= 22;					//Ğ¡±øËÀÍöËùÌá¹©µÄ¾­Ñé¡¢¹¥»÷·¶Î§
-var towerAllHp = 2000, towerAttack = 5, towerAttackRadius = 150;	//ËşµÄÑªÁ¿¡¢¹¥»÷Á¦¡¢¹¥»÷¾àÀë£¨ËşÎª·ÅÉäĞÍ¹¥»÷£©
-var towerMakeExp = 500;												//Ëş»ÙÃğËùÌá¹©µÄ¾­Ñé
-var campAllHp = 3000, campSoldierInterval = 30000;					//´ó±¾ÓªµÄÑªÁ¿¡¢´ó±¾Óª³ö±øµÄ¼ä¸ô
-var camSoldierNum = 3;												//´ó±¾ÓªÒ»´Î³ö±øµÄÊıÁ¿
+//å…³äºactionå¯¹è±¡çš„frameå‚æ•°ä¸ºå½“å‰æ’­æ”¾åˆ°çš„å¸§æ•°ï¼Œkindå‚æ•°ä¸ºè¡Œä¸º
+//1ã€2:è‹±é›„è¡Œèµ°(left,right) 3ã€4:å°å…µè¡Œèµ°(left,right) 5ã€6:è‹±é›„æ”»å‡»(left,right) 7ã€8:å°å…µæ”»å‡»(left,right) 9:å¡”æ”»å‡» 11ã€12: è‹±é›„ç«™ç«‹(left,right) 13ã€14:å°å…µç«™ç«‹(left,right) 15,16:è‹±é›„æ­»äº¡ 17,18:å°å…µæ­»äº¡
+var Soldiers = [[],[]];												//æ‰€æœ‰å°å…µçš„å¯¹è±¡æ•°ç»„
+var Towers = [[],[]], destroyedTowers =[[],[]];						//æ‰€æœ‰é˜²å¾¡å¡”çš„å¯¹è±¡æ•°ç»„
+var Heroes = [[],[]];												//æ‰€æœ‰è‹±é›„çš„å¯¹è±¡æ•°ç»„
+var baseCamp = [];													//å¤§æœ¬è¥çš„å¯¹è±¡æ•°ç»„
+var frameTime = 100;												//ç”»é¢æ’­æ”¾çš„é—´éš”
+var myCanvas = document.getElementById("myCanvas");					//ç”»å¸ƒCanvasçš„Domå…ƒç´ 
+var allPicLeft = 0;													//å±å¹•ç›¸å¯¹å³ç§»çš„è·ç¦»
+var screenMoveSpeed = 30, screenMoveflag = 0;						//ç”»é¢ç§»åŠ¨çš„é€Ÿåº¦å’Œåˆ¤å®š
+var screenMoveBorder = 20;											//å“åº”ç§»åŠ¨åˆ¤å®šçš„è¾¹ç•Œè·ç¦»
+var addBloodRadius = 170;											//å¯ä»¥å›è¡€çš„å¤§æœ¬è¥èŒƒå›´
+var addBloodRate = 0.01;											//å•ä¸ªé—´éš”è¡€é‡å¢åŠ çš„ç™¾åˆ†æ¯”
+var cxt=myCanvas.getContext("2d");									//ç»˜ç”»çš„å¥æŸ„
+var soldierAllHp = 300, soldierAttack = 20;							//å°å…µçš„è¡€é‡ã€æ”»å‡»åŠ›
+var soldierAttackInterval = 1000, soldierSpeed = 10;				//å°å…µçš„æ”»å‡»é—´éš”(ms)ï¼Œç§»åŠ¨é€Ÿåº¦
+var soldierMakeExp = 50; soldierAttackRadius= 22;					//å°å…µæ­»äº¡æ‰€æä¾›çš„ç»éªŒã€æ”»å‡»èŒƒå›´
+var towerAllHp = 2000, towerAttack = 5, towerAttackRadius = 150;	//å¡”çš„è¡€é‡ã€æ”»å‡»åŠ›ã€æ”»å‡»è·ç¦»ï¼ˆå¡”ä¸ºæ”¾å°„å‹æ”»å‡»ï¼‰
+var towerMakeExp = 500;												//å¡”æ¯ç­æ‰€æä¾›çš„ç»éªŒ
+var campAllHp = 3000, campSoldierInterval = 30000;					//å¤§æœ¬è¥çš„è¡€é‡ã€å¤§æœ¬è¥å‡ºå…µçš„é—´éš”
+var camSoldierNum = 3;												//å¤§æœ¬è¥ä¸€æ¬¡å‡ºå…µçš„æ•°é‡
 
 
 
@@ -26,7 +26,7 @@ function getDis(px, py, obj){
 	return (Math.sqrt((px - obj.positionX) *(px - obj.positionX) + (py - obj.positionY) * (py - obj.positionY)) - obj.positionRadius);
 }
 
-function getMove(hx, hy, tx, ty, speed)					//ÏòÒ»¸öÄ¿±êµãÒÆ¶¯£¬Ä¿±êÎªÒÆ¶¯µ½µãÉÏ
+function getMove(hx, hy, tx, ty, speed)					//å‘ä¸€ä¸ªç›®æ ‡ç‚¹ç§»åŠ¨ï¼Œç›®æ ‡ä¸ºç§»åŠ¨åˆ°ç‚¹ä¸Š
 {
 	var x = tx - hx;
 	var y = ty - hy;
@@ -55,7 +55,7 @@ function getMove(hx, hy, tx, ty, speed)					//ÏòÒ»¸öÄ¿±êµãÒÆ¶¯£¬Ä¿±êÎªÒÆ¶¯µ½µãÉÏ
 	return obj;
 }
 
-function getMoveFollow(hx, hy, radius, tx, ty, speed)							//ÏòÒ»¸ö¶ÔÏóÒÆ¶¯£¬Ä¿±êÎªµ½Ò»¸ö¶ÔÏóÖĞĞÄµãÏà¾àradiusµÄ¾àÀë
+function getMoveFollow(hx, hy, radius, tx, ty, speed)							//å‘ä¸€ä¸ªå¯¹è±¡ç§»åŠ¨ï¼Œç›®æ ‡ä¸ºåˆ°ä¸€ä¸ªå¯¹è±¡ä¸­å¿ƒç‚¹ç›¸è·radiusçš„è·ç¦»
 {
 	var x = tx - hx;
 	var y = ty - hy;
@@ -87,14 +87,14 @@ function getMoveFollow(hx, hy, radius, tx, ty, speed)							//ÏòÒ»¸ö¶ÔÏóÒÆ¶¯£¬Ä¿
 	return obj;
 }
 
-function checkContain(px, py, obj){													//ÅĞ¶Ïµ±Ç°ÊÇ·ñÔÚÕâ¸ö¶ÔÏóµÄµã»÷¿éÄÚ£¬Îª´¦ÀíÊó±êµã»÷ÊÂ¼ş
+function checkContain(px, py, obj){													//åˆ¤æ–­å½“å‰æ˜¯å¦åœ¨è¿™ä¸ªå¯¹è±¡çš„ç‚¹å‡»å—å†…ï¼Œä¸ºå¤„ç†é¼ æ ‡ç‚¹å‡»äº‹ä»¶
 	if (px < obj.positionX - obj.left || px > obj.positionX + obj.right)
 		return false;
 	if (py < obj.positionY - obj.top || py > obj.positionY + obj.bottom)
 		return false;
 	return true;
 }
-function getClickObj(tx, ty, kind){													//»ñÈ¡µ±Ç°±»µã»÷µ½µÄ¶ÔÏó£¬×¢Òâ¶ÔÏóµÄ²ã´Î½á¹¹
+function getClickObj(tx, ty, kind){													//è·å–å½“å‰è¢«ç‚¹å‡»åˆ°çš„å¯¹è±¡ï¼Œæ³¨æ„å¯¹è±¡çš„å±‚æ¬¡ç»“æ„
 	var maxDis = 0, maxObj;
 	for (var i = 0 ; i < Soldiers[kind].length; i++){
 		if (checkContain(tx, ty, Soldiers[kind][i])){
@@ -131,17 +131,17 @@ function getClickObj(tx, ty, kind){													//»ñÈ¡µ±Ç°±»µã»÷µ½µÄ¶ÔÏó£¬×¢Òâ¶Ô
 	else return null;
 }
 
-function checkSort(a, b){															//±È½Ïº¯Êı£¬ÊÇY´ÓĞ¡µ½´óµÄÅÅĞò£¬ÓÃÓÚ²ã´Î»æÍ¼
+function checkSort(a, b){															//æ¯”è¾ƒå‡½æ•°ï¼Œæ˜¯Yä»å°åˆ°å¤§çš„æ’åºï¼Œç”¨äºå±‚æ¬¡ç»˜å›¾
 	if (a.positionY > b.positionY){
 		return 1;
 	}
 	else return -1;	
 }
-function gameOver(kind){															//ÓÎÏ·½áÊøµÄÏìÓ¦£¬kindÎªÊ§°Ü·½
+function gameOver(kind){															//æ¸¸æˆç»“æŸçš„å“åº”ï¼Œkindä¸ºå¤±è´¥æ–¹
 	alert('gameOver');
 }
-var soldierClass ={								//Ğ¡±øµÄ¶ÔÏó
-	createNew : function(px, py, direct){					//¹¹Ôìº¯Êı
+var soldierClass ={								//å°å…µçš„å¯¹è±¡
+	createNew : function(px, py, direct){					//æ„é€ å‡½æ•°
 		var soldierRet = {};
 		soldierRet.idType = 'Soldier';
 		soldierRet.kind = direct;
@@ -162,22 +162,22 @@ var soldierClass ={								//Ğ¡±øµÄ¶ÔÏó
 		soldierRet.attackWait = 0;
 		soldierRet.allHp = soldierAllHp;
 		soldierRet.nowHp = soldierRet.allHp;
-		soldierRet.action = {kind:direct + 3, frame:0};																					//³õÊ¼ÎªÒÆ¶¯×´Ì¬
+		soldierRet.action = {kind:direct + 3, frame:0};																					//åˆå§‹ä¸ºç§»åŠ¨çŠ¶æ€
 		soldierRet.makeExp = soldierMakeExp;
-		soldierRet.perform = function(kind){																							//Ã¿»ØºÏÖ´ĞĞµÄ²Ù×÷º¯Êı
+		soldierRet.perform = function(kind){																							//æ¯å›åˆæ‰§è¡Œçš„æ“ä½œå‡½æ•°
 			var minDis = 100000000, minObj;
-			if (soldierRet.attackWait > 0)																								//CDÊ±¼ä¼õÉÙ
+			if (soldierRet.attackWait > 0)																								//CDæ—¶é—´å‡å°‘
 				soldierRet.attackWait--;
-			soldierRet.action.frame = (soldierRet.action.frame + 1) % actionFlash[soldierRet.action.kind].len;							//»­Ãæ²¥·ÅÖ¡ÊıÔö¼Ó
-			if (soldierRet.nowHp <= 0)																									//ËÀÍöÊ¿±ø²»Ö´ĞĞ
+			soldierRet.action.frame = (soldierRet.action.frame + 1) % actionFlash[soldierRet.action.kind].len;							//ç”»é¢æ’­æ”¾å¸§æ•°å¢åŠ 
+			if (soldierRet.nowHp <= 0)																									//æ­»äº¡å£«å…µä¸æ‰§è¡Œ
 				return;
-			if ((soldierRet.action.kind === 7 || soldierRet.action.kind === 8) && soldierRet.action.frame === 0){						//¹¥»÷¶¯×÷Íê³É
-				soldierRet.target.attacked(soldierRet.attack);																			//ÔÚ¹¥»÷¶¯×÷Íê³ÉÊ±Ôì³ÉÉËº¦
-				soldierRet.action.kind = soldierRet.action.kind - 4;																	//×ªÎªĞĞ×ß×´Ì¬
+			if ((soldierRet.action.kind === 7 || soldierRet.action.kind === 8) && soldierRet.action.frame === 0){						//æ”»å‡»åŠ¨ä½œå®Œæˆ
+				soldierRet.target.attacked(soldierRet.attack);																			//åœ¨æ”»å‡»åŠ¨ä½œå®Œæˆæ—¶é€ æˆä¼¤å®³
+				soldierRet.action.kind = soldierRet.action.kind - 4;																	//è½¬ä¸ºè¡Œèµ°çŠ¶æ€
 				soldierRet.action.frame = 0;
 				soldierRet.target = null;
 			}
-			for (var i = 0; i < Soldiers[1 - kind].length; i++){																						//ÒÔÏÂÎª»ñÈ¡¾àµ±Ç°¶ÔÏó×î½üµÄµĞ¶Ô¶ÔÏó
+			for (var i = 0; i < Soldiers[1 - kind].length; i++){																						//ä»¥ä¸‹ä¸ºè·å–è·å½“å‰å¯¹è±¡æœ€è¿‘çš„æ•Œå¯¹å¯¹è±¡
 				var p = getDis(soldierRet.positionX, soldierRet.positionY, Soldiers[1 - kind][i]);
 				if (p < minDis && Soldiers[1 - kind][i].nowHp > 0){
 					minDis = p;
@@ -203,29 +203,29 @@ var soldierClass ={								//Ğ¡±øµÄ¶ÔÏó
 				minDis = p;
 				minObj = baseCamp[1 - kind];
 			}
-			if (minDis < soldierRet.attackRadius + 1 && soldierRet.action.kind != 8 && soldierRet.action.kind != 7) {				//µ±×î½üµĞ¶Ô¶ÔÏóÔÚ»ú·¿¹¥»÷·¶Î§ÄÚ£¬ÔòÖ´ĞĞ¹¥»÷²Ù×÷
-				if (soldierRet.attackWait === 0){																					//µ±½ø¹¥CDÊ±¼äÒÑµ½£¬½øĞĞ¹¥»÷
+			if (minDis < soldierRet.attackRadius + 1 && soldierRet.action.kind != 8 && soldierRet.action.kind != 7) {				//å½“æœ€è¿‘æ•Œå¯¹å¯¹è±¡åœ¨æœºæˆ¿æ”»å‡»èŒƒå›´å†…ï¼Œåˆ™æ‰§è¡Œæ”»å‡»æ“ä½œ
+				if (soldierRet.attackWait === 0){																					//å½“è¿›æ”»CDæ—¶é—´å·²åˆ°ï¼Œè¿›è¡Œæ”»å‡»
 					soldierRet.attackWait = soldierRet.attackInterval;
 					soldierRet.target = minObj;
 					soldierRet.action.frame = 0;
-					if (minObj.positionX < soldierRet.positionX)																//ÅĞ¶Ï¹¥»÷³¯Ïò
+					if (minObj.positionX < soldierRet.positionX)																//åˆ¤æ–­æ”»å‡»æœå‘
 						soldierRet.action.kind = 7;
 					else soldierRet.action.kind = 8;
 				}
-				else {																											//Ô­µØÕ¾Á¢£¬µÈ´ı¹¥»÷CD
+				else {																											//åŸåœ°ç«™ç«‹ï¼Œç­‰å¾…æ”»å‡»CD
 					if (minObj.positionX < soldierRet.positionX)
 						soldierRet.action.kind = 13;
 					else soldierRet.action.kind = 14;
 					soldierRet.action.frame = 0;
 				}
 			}
-			else if (soldierRet.action.kind != 8 && soldierRet.action.kind != 7){																	//µ±Ä¿±ê×´Ì¬ÔÚ·¶Î§ÒÔÍâ£¬ÇÒµ±Ç°Îª·Ç¹¥»÷×´Ì¬£¬Ö´ĞĞÒÆ¶¯²Ù×÷
-				if (soldierRet.action.kind === 14 || soldierRet.action.kind === 13)																	//Õ¾Á¢×´Ì¬×ªÎªÒÆ¶¯×´Ì¬
+			else if (soldierRet.action.kind != 8 && soldierRet.action.kind != 7){																	//å½“ç›®æ ‡çŠ¶æ€åœ¨èŒƒå›´ä»¥å¤–ï¼Œä¸”å½“å‰ä¸ºéæ”»å‡»çŠ¶æ€ï¼Œæ‰§è¡Œç§»åŠ¨æ“ä½œ
+				if (soldierRet.action.kind === 14 || soldierRet.action.kind === 13)																	//ç«™ç«‹çŠ¶æ€è½¬ä¸ºç§»åŠ¨çŠ¶æ€
 					soldierRet.action.frame = 0;
 				if (minObj.positionX < soldierRet.positionX)
 					soldierRet.action.kind = 3;
 				else soldierRet.action.kind = 4;
-				var pObj = getMoveFollow(soldierRet.positionX, soldierRet.positionY, minObj.positionRadius + soldierRet.attackRadius, minObj.positionX, minObj.positionY, soldierRet.speed);			//ÏòÄ¿±ê¶ÔÏóÒÆ¶¯
+				var pObj = getMoveFollow(soldierRet.positionX, soldierRet.positionY, minObj.positionRadius + soldierRet.attackRadius, minObj.positionX, minObj.positionY, soldierRet.speed);			//å‘ç›®æ ‡å¯¹è±¡ç§»åŠ¨
 				soldierRet.positionX = pObj.positionX;
 				soldierRet.positionY = pObj.positionY;
 			}
@@ -237,12 +237,12 @@ var soldierClass ={								//Ğ¡±øµÄ¶ÔÏó
 	}
 };
 
-var heroClass ={									//Íæ¼Ò¿ØÖÆÓ¢ĞÛµÄ¶ÔÏó
+var heroClass ={									//ç©å®¶æ§åˆ¶è‹±é›„çš„å¯¹è±¡
 	createNew : function(px, py, kindHero){
 		var heroRet = {};
 		heroRet.idType = 'Hero';
 		heroRet.kind = kindHero;
-		heroRet.positionX = px;												//ÒÔÏÂÒ»¸öÓ¢ĞÛµÄ´óÖÂ·½Î»²¼¾Ö
+		heroRet.positionX = px;												//ä»¥ä¸‹ä¸€ä¸ªè‹±é›„çš„å¤§è‡´æ–¹ä½å¸ƒå±€
 		heroRet.positionY = py;
 		heroRet.picX = 176;
 		heroRet.picY = 215;
@@ -251,39 +251,39 @@ var heroClass ={									//Íæ¼Ò¿ØÖÆÓ¢ĞÛµÄ¶ÔÏó
 		heroRet.right = 43 * 0.7;
 		heroRet.top = 160 * 0.7 + 28;
 		heroRet.bottom = 0;
-		heroRet.speed = 20;														//ÒÆ¶¯ËÙ¶È
-		heroRet.attack = 60;													//ÉËº¦
-		heroRet.attackRadius = 40;												//¹¥»÷·¶Î§
-		heroRet.attackInterval = Math.round(1000 / frameTime);					//¹¥»÷¼ä¸ô
-		heroRet.attackWait = 0;													//µ±Ç°CDÊ±¼ä
+		heroRet.speed = 20;														//ç§»åŠ¨é€Ÿåº¦
+		heroRet.attack = 60;													//ä¼¤å®³
+		heroRet.attackRadius = 40;												//æ”»å‡»èŒƒå›´
+		heroRet.attackInterval = Math.round(1000 / frameTime);					//æ”»å‡»é—´éš”
+		heroRet.attackWait = 0;													//å½“å‰CDæ—¶é—´
 		heroRet.allHp = 1000;
 		heroRet.nowHp = heroRet.allHp;
 		heroRet.deathCD = Math.round(10000 / frameTime);
 		heroRet.nowDeathCD = -1;
-		heroRet.action = {kind:12 - kindHero, frame:0};							//µ±Ç°ĞĞÎª
-		heroRet.target = null;													//µ±Ç°ÕıÔÚ¹¥»÷µÄ¶ÔÏó
-		heroRet.positionObj = null;												//µ±Ç°ÕıÔÚ×·ÖğµÄ¶ÔÏó(ÓÒ¼üµã»÷)Ö»ÄÜÎªµĞ¶Ô¶ÔÏó
-		heroRet.positionTo = null;												//µ±Ç°ÕıÔÚ×·ÖğµÄµã(ÓÒ¼üµã»÷)
-		heroRet.perform = function(){						//Íæ¼Ò¿ØÖÆÓ¢ĞÛµÄĞĞÎª
-			heroRet.action.frame = (heroRet.action.frame + 1) % actionFlash[heroRet.action.kind].len;						//»­Ãæ²¥·ÅÖ¡ÊıÔö¼Ó
-			if (heroRet.attackWait > 0)																						//CDÊ±¼ä¼õÉÙ
+		heroRet.action = {kind:12 - kindHero, frame:0};							//å½“å‰è¡Œä¸º
+		heroRet.target = null;													//å½“å‰æ­£åœ¨æ”»å‡»çš„å¯¹è±¡
+		heroRet.positionObj = null;												//å½“å‰æ­£åœ¨è¿½é€çš„å¯¹è±¡(å³é”®ç‚¹å‡»)åªèƒ½ä¸ºæ•Œå¯¹å¯¹è±¡
+		heroRet.positionTo = null;												//å½“å‰æ­£åœ¨è¿½é€çš„ç‚¹(å³é”®ç‚¹å‡»)
+		heroRet.perform = function(){						//ç©å®¶æ§åˆ¶è‹±é›„çš„è¡Œä¸º
+			heroRet.action.frame = (heroRet.action.frame + 1) % actionFlash[heroRet.action.kind].len;						//ç”»é¢æ’­æ”¾å¸§æ•°å¢åŠ 
+			if (heroRet.attackWait > 0)																						//CDæ—¶é—´å‡å°‘
 				heroRet.attackWait--;
-			if (heroRet.nowHp <= 0)																							//Ó¢ĞÛËÀÍöÊ±²»Ö´ĞĞ
+			if (heroRet.nowHp <= 0)																							//è‹±é›„æ­»äº¡æ—¶ä¸æ‰§è¡Œ
 				return;
-			if ((heroRet.action.kind === 5 || heroRet.action.kind === 6) && heroRet.action.frame === 0){					//Ó¢ĞÛÒ»´Î¹¥»÷½áÊø£¬×ªÎª¾²Ö¹×´Ì¬
-				heroRet.target.attacked(heroRet.attack);																	//¶ÔÄ¿±êÔì³ÉÉËº¦
+			if ((heroRet.action.kind === 5 || heroRet.action.kind === 6) && heroRet.action.frame === 0){					//è‹±é›„ä¸€æ¬¡æ”»å‡»ç»“æŸï¼Œè½¬ä¸ºé™æ­¢çŠ¶æ€
+				heroRet.target.attacked(heroRet.attack);																	//å¯¹ç›®æ ‡é€ æˆä¼¤å®³
 				heroRet.target = null;
 				heroRet.action.kind = heroRet.action.kind + 6;
 				heroRet.action.frame = 0;
 			}
 			if (heroRet.positionObj != null && heroRet.positionObj.nowHp <= 0)
 				heroRet.positionObj = null;
-			if (heroRet.action.kind != 5 && heroRet.action.kind != 6){														//µ±Ç°Îª·Ç½ø¹¥×´Ì¬Ê±
-				if (heroRet.positionObj != null){																			//µ±Ç°ÓĞ×·Öğ¶ÔÏóÊ±
+			if (heroRet.action.kind != 5 && heroRet.action.kind != 6){														//å½“å‰ä¸ºéè¿›æ”»çŠ¶æ€æ—¶
+				if (heroRet.positionObj != null){																			//å½“å‰æœ‰è¿½é€å¯¹è±¡æ—¶
 					var temObj = heroRet.positionObj;
 					var p = getDis(heroRet.positionX, heroRet.positionY, temObj);
-					if (p < heroRet.attackRadius + 1){																		//ÔÚ¹¥»÷·¶Î§ÄÚÔò¹¥»÷
-						if (heroRet.attackWait === 0){																		//ÎŞCDÊ±¼äÊ±¿ªÊ¼¹¥»÷
+					if (p < heroRet.attackRadius + 1){																		//åœ¨æ”»å‡»èŒƒå›´å†…åˆ™æ”»å‡»
+						if (heroRet.attackWait === 0){																		//æ— CDæ—¶é—´æ—¶å¼€å§‹æ”»å‡»
 							heroRet.attackWait = heroRet.attackInterval;
 							heroRet.target = temObj;
 							heroRet.action.frame = 0;
@@ -291,18 +291,18 @@ var heroClass ={									//Íæ¼Ò¿ØÖÆÓ¢ĞÛµÄ¶ÔÏó
 							heroRet.action.kind = 5;
 							else heroRet.action.kind = 6;
 						}
-						else {																											//µÈ´ı¹¥»÷CD
+						else {																											//ç­‰å¾…æ”»å‡»CD
 							if (temObj.positionX < heroRet.positionX)
 								heroRet.action.kind = 11;
 							else heroRet.action.kind = 12;
 							heroRet.action.frame = 0;
 						}
 					}
-					else{																									//ÏòÄ¿±ê×´Ì¬ÒÆ¶¯
-						if (heroRet.action.kind != 1 && heroRet.action.kind != 2){											//·ÇÒÆ¶¯×´Ì¬×ªÎªÒÆ¶¯×´Ì¬
+					else{																									//å‘ç›®æ ‡çŠ¶æ€ç§»åŠ¨
+						if (heroRet.action.kind != 1 && heroRet.action.kind != 2){											//éç§»åŠ¨çŠ¶æ€è½¬ä¸ºç§»åŠ¨çŠ¶æ€
 							heroRet.action.frame = 0;
 						}
-						if (temObj.positionX < heroRet.positionX)															//ÅĞ¶¨ÒÆ¶¯·½Ïò
+						if (temObj.positionX < heroRet.positionX)															//åˆ¤å®šç§»åŠ¨æ–¹å‘
 							heroRet.action.kind = 1;
 						else
 							heroRet.action.kind = 2;
@@ -311,8 +311,8 @@ var heroClass ={									//Íæ¼Ò¿ØÖÆÓ¢ĞÛµÄ¶ÔÏó
 						heroRet.positionY = pObj.positionY;
 					}
 				}
-				else if (heroRet.positionTo != null){																		//ÏòÒ»¸öµãÒÆ¶¯
-					if (heroRet.action.kind != 1 && heroRet.action.kind != 2){												//·ÇÒÆ¶¯×´Ì¬×ªÎªÒÆ¶¯×´Ì¬
+				else if (heroRet.positionTo != null){																		//å‘ä¸€ä¸ªç‚¹ç§»åŠ¨
+					if (heroRet.action.kind != 1 && heroRet.action.kind != 2){												//éç§»åŠ¨çŠ¶æ€è½¬ä¸ºç§»åŠ¨çŠ¶æ€
 						heroRet.action.frame = 0;
 					}
 					if (heroRet.positionTo.x < heroRet.positionX)
@@ -322,32 +322,32 @@ var heroClass ={									//Íæ¼Ò¿ØÖÆÓ¢ĞÛµÄ¶ÔÏó
 					var pObj = getMove(heroRet.positionX, heroRet.positionY, heroRet.positionTo.x, heroRet.positionTo.y, heroRet.speed);
 					heroRet.positionX = pObj.positionX;
 					heroRet.positionY = pObj.positionY;
-					if (heroRet.positionX === heroRet.positionTo.x && heroRet.positionY === heroRet.positionTo.y){			//ÒÑµÖ´ïÄ¿±êµãÊ±£¬×ªÎª¾²Ö¹×´Ì¬
+					if (heroRet.positionX === heroRet.positionTo.x && heroRet.positionY === heroRet.positionTo.y){			//å·²æŠµè¾¾ç›®æ ‡ç‚¹æ—¶ï¼Œè½¬ä¸ºé™æ­¢çŠ¶æ€
 						heroRet.action.frame = 0;
 						heroRet.action.kind += 10;
 						heroRet.positionTo = null;
 					}
 				}
-				else{																										//ÎŞ²Ù×÷£¬¾²Ö¹
+				else{																										//æ— æ“ä½œï¼Œé™æ­¢
 					heroRet.action.kind = 12 - heroRet.action.kind % 2;
 					heroRet.action.frame = 0;
 				}
 			}
 		}
-		heroRet.performAI = function(kind){								//µçÄÔAIµÄĞĞÎª
+		heroRet.performAI = function(kind){								//ç”µè„‘AIçš„è¡Œä¸º
 		}
-		heroRet.attacked = function(attackNum){							//ÊÕµ½ÉËº¦
+		heroRet.attacked = function(attackNum){							//æ”¶åˆ°ä¼¤å®³
 			heroRet.nowHp -= attackNum;
 		}
 		return heroRet;
 	}
 };
 
-var towerClass ={									//ËşµÄ¶ÔÏó
+var towerClass ={									//å¡”çš„å¯¹è±¡
 	createNew : function(px, py, qx, qy,pleft,pright,ptop,pbuttom,pradius,picx,picy, id){
 		var towerRet = {};
 		towerRet.idType = id;
-		towerRet.picX = picx;												//ÒÔÏÂÎªËşµÄÎ»ÖÃ²ÎÊı
+		towerRet.picX = picx;												//ä»¥ä¸‹ä¸ºå¡”çš„ä½ç½®å‚æ•°
 		towerRet.picY = picy;
 		towerRet.positionX = px;
 		towerRet.positionY = py;
@@ -356,29 +356,29 @@ var towerClass ={									//ËşµÄ¶ÔÏó
 		towerRet.right = pright;
 		towerRet.top = ptop;
 		towerRet.bottom = pbuttom;
-		towerRet.attackX = qx;												//¹¥»÷µãËùÔÚÎ»ÖÃ
+		towerRet.attackX = qx;												//æ”»å‡»ç‚¹æ‰€åœ¨ä½ç½®
 		towerRet.attackY = qy;
 		towerRet.allHp = towerAllHp;
 		towerRet.nowHp = towerRet.allHp;
 		towerRet.attackRadius = towerAttackRadius;
-		towerRet.attack = towerAttack;												//¹¥»÷Îª³ÖĞø¹¥»÷
-		towerRet.target = null;												//¹¥»÷¶ÔÏó
-		towerRet.makeExp = 500;												//Ìá¹©¾­Ñé
+		towerRet.attack = towerAttack;												//æ”»å‡»ä¸ºæŒç»­æ”»å‡»
+		towerRet.target = null;												//æ”»å‡»å¯¹è±¡
+		towerRet.makeExp = 500;												//æä¾›ç»éªŒ
 		towerRet.perform = function(kind){
-			if (towerRet.nowHp <= 0)											//Ëş±»»Ù»µÊ±·µ»Ø
+			if (towerRet.nowHp <= 0)											//å¡”è¢«æ¯åæ—¶è¿”å›
 				return;
-			if (towerRet.target != null){									//µ±Ç°´æÔÚ¹¥»÷Ä¿±êÊ±
-				if (getDis(towerRet.positionX, towerRet.positionY, towerRet.target) > towerRet.attackRadius){		//Ô­ÏÈÄ¿±êÒÑÀë¿ª»ò²»´æÔÚ
+			if (towerRet.target != null){									//å½“å‰å­˜åœ¨æ”»å‡»ç›®æ ‡æ—¶
+				if (getDis(towerRet.positionX, towerRet.positionY, towerRet.target) > towerRet.attackRadius){		//åŸå…ˆç›®æ ‡å·²ç¦»å¼€æˆ–ä¸å­˜åœ¨
 					towerRet.target = null;
 				}
 				if (towerRet.target != null){
-					towerRet.target.attacked(towerRet.attack);					//Ôì³ÉÉËº¦
+					towerRet.target.attacked(towerRet.attack);					//é€ æˆä¼¤å®³
 					if (towerRet.target.nowHp <= 0)
 						towerRet.target = null;
 				}
 			}
-			else {															//µ±Ç°²»´æÔÚ¹¥»÷Ä¿±êÊ±
-				var minDis = 100000000, minObj;								//²éÕÒ¾àÀëËş×î½üµÄµĞ¶Ô¶ÔÏó
+			else {															//å½“å‰ä¸å­˜åœ¨æ”»å‡»ç›®æ ‡æ—¶
+				var minDis = 100000000, minObj;								//æŸ¥æ‰¾è·ç¦»å¡”æœ€è¿‘çš„æ•Œå¯¹å¯¹è±¡
 				for (var i = 0; i < Soldiers[1 - kind].length; i++){
 					var p = getDis(towerRet.positionX, towerRet.positionY, Soldiers[1 - kind][i]);
 					if (p < minDis){
@@ -393,7 +393,7 @@ var towerClass ={									//ËşµÄ¶ÔÏó
 						minObj = Heroes[1 - kind][i];
 					}
 				}
-				if (minDis <= towerRet.attackRadius){							//µ±´Ë¶ÔÏóÔÚËşµÄ¹¥»÷·¶Î§Ö®ÄÚÊ±¿ªÊ¼¹¥»÷
+				if (minDis <= towerRet.attackRadius){							//å½“æ­¤å¯¹è±¡åœ¨å¡”çš„æ”»å‡»èŒƒå›´ä¹‹å†…æ—¶å¼€å§‹æ”»å‡»
 					towerRet.target = minObj;
 					
 				}
@@ -406,11 +406,11 @@ var towerClass ={									//ËşµÄ¶ÔÏó
 	}
 };
 
-var campClass ={															//´ó±¾ÓªµÄ¶ÔÏó
+var campClass ={															//å¤§æœ¬è¥çš„å¯¹è±¡
 	createNew : function(px, py,picx,picy, kidType){
 		var campRet = {};
 		campRet.idType = 'Camp';
-		campRet.picX = picx;									//ÒÔÏÂÎª´ó±¾ÓªµÄÎ»ÖÃ²ÎÊı
+		campRet.picX = picx;									//ä»¥ä¸‹ä¸ºå¤§æœ¬è¥çš„ä½ç½®å‚æ•°
 		campRet.picy = picy
 		campRet.positionX = px;
 		campRet.positionY = py;
@@ -421,21 +421,21 @@ var campClass ={															//´ó±¾ÓªµÄ¶ÔÏó
 		campRet.top = 94;
 		campRet.allHp = campSoldierInterval;
 		campRet.nowHp = campRet.allHp;
-		campRet.kind = kidType;							//´ó±¾ÓªÊôÓÚÄÄÒ»·½
-		campRet.soldierInterval = Math.round(campSoldierInterval / frameTime);						//Ò»Åú±ø¼ä¸ô
-		campRet.totalNum = camSoldierNum;															//Ò»Åú±øÊıÁ¿
-		campRet.nowNum = 0;																//µ±Ç°ÒÑ´ïÖ¡Êı
-		campRet.oneInterval = 10;															//ÏàÁÚÁ½¸ö±ø¼ä¸ô
+		campRet.kind = kidType;							//å¤§æœ¬è¥å±äºå“ªä¸€æ–¹
+		campRet.soldierInterval = Math.round(campSoldierInterval / frameTime);						//ä¸€æ‰¹å…µé—´éš”
+		campRet.totalNum = camSoldierNum;															//ä¸€æ‰¹å…µæ•°é‡
+		campRet.nowNum = 0;																//å½“å‰å·²è¾¾å¸§æ•°
+		campRet.oneInterval = 10;															//ç›¸é‚»ä¸¤ä¸ªå…µé—´éš”
 		campRet.perform = function(kind){
 			campRet.nowNum++;
-			if (campRet.nowNum % campRet.oneInterval === 0 && campRet.nowNum <= campRet.oneInterval * campRet.totalNum)				//·ûºÏ³ö±øÌõ¼şÊ±¿ªÊ¼³ö±ø
+			if (campRet.nowNum % campRet.oneInterval === 0 && campRet.nowNum <= campRet.oneInterval * campRet.totalNum)				//ç¬¦åˆå‡ºå…µæ¡ä»¶æ—¶å¼€å§‹å‡ºå…µ
 				Soldiers[kind].push(soldierClass.createNew(campRet.positionX, campRet.positionY + (Math.random() -1) *80, kind));
 			if (campRet.nowNum == campRet.soldierInterval)
 				campRet.nowNum = 0;
 		}
 		campRet.attacked = function(attackNum){
 			campRet.nowHp -= attackNum;
-			if (campRet.nowHp <= 0){								//´ó±¾ÓªÃ»ÑªÊ±ÓÎÏ·½áÊø
+			if (campRet.nowHp <= 0){								//å¤§æœ¬è¥æ²¡è¡€æ—¶æ¸¸æˆç»“æŸ
 				gameOver(this.kind);
 			}
 		}
@@ -443,7 +443,7 @@ var campClass ={															//´ó±¾ÓªµÄ¶ÔÏó
 	}
 };
 
-window.onmousemove = function(e) {													//Êó±êÒÆ¶¯ÊÂ¼şµÄÏìÓ¦£¬ÓÃÓÚ¿¿×ó¡¢¿¿ÓÒÒÆ¶¯»­Ãæ
+window.onmousemove = function(e) {													//é¼ æ ‡ç§»åŠ¨äº‹ä»¶çš„å“åº”ï¼Œç”¨äºé å·¦ã€é å³ç§»åŠ¨ç”»é¢
    	var tx = e.pageX - myCanvas.getBoundingClientRect().left;
 	var ty = e.pageY - myCanvas.getBoundingClientRect().top;
 	if (tx < 0)
@@ -456,65 +456,65 @@ window.onmousemove = function(e) {													//Êó±êÒÆ¶¯ÊÂ¼şµÄÏìÓ¦£¬ÓÃÓÚ¿¿×ó¡¢¿
 		screenMoveflag = 2;
 	else screenMoveflag = 0;
 }
-myCanvas.onmousedown = function(e) {													//Êó±êµã»÷ÊÂ¼şµÄÏìÓ¦
+myCanvas.onmousedown = function(e) {													//é¼ æ ‡ç‚¹å‡»äº‹ä»¶çš„å“åº”
    	var tx = e.pageX - myCanvas.getBoundingClientRect().left  + allPicLeft;
 	var ty = e.pageY - myCanvas.getBoundingClientRect().top;
-    if (e.button==2)																	//Êó±êÓÒ»÷ÎªÓ¢ĞÛµÄÒÆ¶¯¹¥»÷
+    if (e.button==2)																	//é¼ æ ‡å³å‡»ä¸ºè‹±é›„çš„ç§»åŠ¨æ”»å‡»
     {
 		var clickObj = getClickObj(tx, ty, 1);
-		if (clickObj == null){		//ÒÆ¶¯µ½¸ÃÎ»ÖÃ
+		if (clickObj == null){		//ç§»åŠ¨åˆ°è¯¥ä½ç½®
 			Heroes[0][0].positionTo = {x:tx, y:ty};
 			Heroes[0][0].positionObj = null;
 		}
-		else{						//¹¥»÷Ä¿±ê
+		else{						//æ”»å‡»ç›®æ ‡
 			Heroes[0][0].positionTo = null;
 			Heroes[0][0].positionObj = clickObj;
 		}
     }
 };
 
-function initial(){																			//³õÊ¼»¯¹ı³Ì
-	document.body.oncontextmenu=function rightClick(){ window.event.returnValue= false;}					//½ûÓÃÊó±êÓÒ»÷Ô­Ê¼ÊÂ¼ş
-	baseCamp.push(campClass.createNew(266,422,77,92, 0));													//¼ÓÈë´ó±¾Óª
+function initial(){																			//åˆå§‹åŒ–è¿‡ç¨‹
+	document.body.oncontextmenu=function rightClick(){ window.event.returnValue= false;}					//ç¦ç”¨é¼ æ ‡å³å‡»åŸå§‹äº‹ä»¶
+	baseCamp.push(campClass.createNew(266,422,77,92, 0));													//åŠ å…¥å¤§æœ¬è¥
 	baseCamp.push(campClass.createNew(3359,422,77,92, 1));
-	Towers[0].push(towerClass.createNew(482.13,296.64,474,186.5,35,35,118.5,11,37,74,141,'towerSmall'));					//¼ÓÈë·ÀÓùËş
+	Towers[0].push(towerClass.createNew(482.13,296.64,474,186.5,35,35,118.5,11,37,74,141,'towerSmall'));					//åŠ å…¥é˜²å¾¡å¡”
 	Towers[0].push(towerClass.createNew(480.49,530.42,478.04,422.37,35,35,118.5,11,37,74,141, 'towerSmall'));
 	Towers[0].push(towerClass.createNew(1375,409,1370,265,47,47,157.5,21,53.5,75,161, 'towerBig'));
 	Towers[1].push(towerClass.createNew(3146.18,295.68,3137.18,186.68,35,35,118.5,11,37,74,141, 'towerSmall'));
 	Towers[1].push(towerClass.createNew(3146.18,532.18,3142.18,421.18,35,35,118.5,11,37,74,141, 'towerSmall'));
 	Towers[1].push(towerClass.createNew(2226,413,2221,268,47,47,157.5,21,53.5,75,161, 'towerBig'));
-	Heroes[0].push(heroClass.createNew(100, 400, 0));																	//¼ÓÈëÓ¢ĞÛ
-	setInterval(cycleOperation, frameTime);					//¼ÆÊ±º¯Êı
+	Heroes[0].push(heroClass.createNew(100, 400, 0));																	//åŠ å…¥è‹±é›„
+	setInterval(cycleOperation, frameTime);					//è®¡æ—¶å‡½æ•°
 
 }
-function cycleOperation(){										//¶¨Ê±Ö´ĞĞ
-	for (var k = 0; k < 2; k++)										//Ğ¡±øĞĞ¶¯
+function cycleOperation(){										//å®šæ—¶æ‰§è¡Œ
+	for (var k = 0; k < 2; k++)										//å°å…µè¡ŒåŠ¨
 		for (var i = 0; i < Soldiers[k].length; i++){
 			Soldiers[k][i].perform(k);
 		}
-	for (var k = 0; k < 2; k++)										//·ÀÓùËşĞĞ¶¯
+	for (var k = 0; k < 2; k++)										//é˜²å¾¡å¡”è¡ŒåŠ¨
 		for (var i = 0; i < Towers[k].length; i++){
 			Towers[k][i].perform(k);
 		}
-	Heroes[0][0].perform();											//¼º·½Ó¢ĞÛĞĞ¶¯
-	for (var i = 0; i < Heroes[1].length; i++){						//µĞ·½Ó¢ĞÛĞĞ¶¯
+	Heroes[0][0].perform();											//å·±æ–¹è‹±é›„è¡ŒåŠ¨
+	for (var i = 0; i < Heroes[1].length; i++){						//æ•Œæ–¹è‹±é›„è¡ŒåŠ¨
 		Heroes[1][i].performAI(1);
 	}
-	for (var k = 0; k < 2; k++)										//´ó±¾ÓªĞĞ¶¯
+	for (var k = 0; k < 2; k++)										//å¤§æœ¬è¥è¡ŒåŠ¨
 		baseCamp[k].perform(k);
-	if (screenMoveflag === 1)										//ÅĞ¶Ï»­ÃæÊÇ·ñÒÆ¶¯
+	if (screenMoveflag === 1)										//åˆ¤æ–­ç”»é¢æ˜¯å¦ç§»åŠ¨
 		allPicLeft -= screenMoveSpeed;
 	else if (screenMoveflag === 2)
 		allPicLeft += screenMoveSpeed;
-	if (allPicLeft < 0)												//ÒÆ¶¯·¶Î§ĞŞÕı
+	if (allPicLeft < 0)												//ç§»åŠ¨èŒƒå›´ä¿®æ­£
 		allPicLeft = 0;
 	if (allPicLeft > 3600 - cxt.canvas.width)
 		allPicLeft = 3600 - cxt.canvas.width;
-	checkDead();													//ÅĞ¶Ï¶ÔÏóËÀÍö
-	checkMargin();													//µ÷ÕûÒÆ¶¯·Ç·¨
+	checkDead();													//åˆ¤æ–­å¯¹è±¡æ­»äº¡
+	checkMargin();													//è°ƒæ•´ç§»åŠ¨éæ³•
 	paintOn();
 }
-function checkDead(){													//ÅĞ¶ÏÓÎÏ·ËÀÍö
+function checkDead(){													//åˆ¤æ–­æ¸¸æˆæ­»äº¡
 	for (var k = 0; k < 2; k++)
 		for (var i = 0; i < Soldiers[k].length; i++){
 			if (Soldiers[k][i].nowHp <= 0){
@@ -590,7 +590,7 @@ function adjustPosition(obj){
 			}
 		}
 }
-function checkMargin(){													//ÅĞ¶Ï
+function checkMargin(){													//åˆ¤æ–­
 	for (var k = 0; k < 2; k++)
 		for (var i = 0; i < Soldiers[k].length; i++){
 			adjustPosition(Soldiers[k][i]);
@@ -619,7 +619,7 @@ function drawTowerAttack(drawObj){
 }
 
 
-function drawNowHp(drawObj){//ÍÆ¼öÓ¢ĞÛÑªÁ¿ÔÚ700-2000Ö®¼ä
+function drawNowHp(drawObj){//æ¨èè‹±é›„è¡€é‡åœ¨700-2000ä¹‹é—´
 	var bloodheight = 5;
 	var headtoblood = 10;
 	var bloodhalfwidth = drawObj.left + 16;
@@ -656,7 +656,7 @@ function drawNowHp(drawObj){//ÍÆ¼öÓ¢ĞÛÑªÁ¿ÔÚ700-2000Ö®¼ä
 	}
 	
 }
-function paintOn()													//½«ËùÓĞÍ¼»­µ½canvasÉÏ
+function paintOn()													//å°†æ‰€æœ‰å›¾ç”»åˆ°canvasä¸Š
 {
 	var allObject = [];
 	cxt.clearRect(0,0,cxt.canvas.width, cxt.canvas.height);
@@ -690,7 +690,7 @@ function paintOn()													//½«ËùÓĞÍ¼»­µ½canvasÉÏ
 			img.src = 'images/mappic/tower_home.png';
 		else if (allObject[i].idType == 'Hero'){
 			img.src= actionFlash[allObject[i].action.kind].src[0][allObject[i].action.frame];
-			if (!((allObject[i].action.kind == 1 ||¡¡allObject[i].action.kind == 2 || allObject[i].action.kind == 5 || allObject[i].action.kind == 6 || allObject[i].action.kind == 11 || allObject[i].action.kind == 12|| allObject[i].action.kind == 15 || allObject[i].action.kind == 16)&&allObject[i].action.frame < actionFlash[allObject[i].action.kind].len && allObject[i].action.frame >=0))
+			if (!((allObject[i].action.kind == 1 || allObject[i].action.kind == 2 || allObject[i].action.kind == 5 || allObject[i].action.kind == 6 || allObject[i].action.kind == 11 || allObject[i].action.kind == 12|| allObject[i].action.kind == 15 || allObject[i].action.kind == 16)&&allObject[i].action.frame < actionFlash[allObject[i].action.kind].len && allObject[i].action.frame >=0))
 				alert(12345);
 		}
 		else
