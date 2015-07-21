@@ -1,0 +1,90 @@
+*{margin:0;padding:0;list-style-type:none;}
+a,img{border:0;}
+@font-face {
+    font-family: 'fzjinglei';
+    src: url('../font/xjlfont-webfont.eot');
+    src: url('../font/xjlfont-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../font/xjlfont-webfont.woff2') format('woff2'),
+         url('../font/xjlfont-webfont.woff') format('woff'),
+         url('../font/xjlfont-webfont.ttf') format('truetype'),
+         url('../font/xjlfont-webfont.svg#fzjingleis-r-gbregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+#status_bar
+{
+	width : 1200px; 
+	height: 600px;
+}
+.play
+{
+	font-size: 140px;
+	position: absolute;
+	top:500px;
+	left:0;
+	/*margin-left: -90px;*/
+	z-index: 1000;
+}
+.play p{
+	font-weight: bold;
+	font-family: fzjinglei;
+	background:url("../images/other/wenli_01.jpg") no-repeat left top;
+					-webkit-background-clip: text;
+					-webkit-text-fill-color: transparent;
+}
+.play :hover
+{
+	top:460px;
+}
+.play p:hover
+{
+	font-size: 150px;
+	cursor:pointer;
+	top:490px;
+}
+.help
+{
+	font-size: 140px;
+	position: absolute;
+	top:500px;
+	left:0;
+	/*margin-left: 90px;*/
+	z-index: 1000;
+}
+.help p{
+	font-weight: bold;
+	font-family: fzjinglei;
+	background:url("../images/other/wenli_01.jpg") no-repeat left top;
+					-webkit-background-clip: text;
+					-webkit-text-fill-color: transparent;
+}
+.help p:hover
+{
+	font-size: 150px;
+	cursor:pointer;
+	top:490px;
+	
+
+}
+
+.start{font: Arial, Helvetica, sans-serif, "微软雅黑";overflow:hidden; display:block; }
+.beijinggushi
+{
+	cursor:crosshair;margin:0; padding:0; position:absolute; overflow:hidden; background:#000; left:0; top:0; width:100%; height:100%;
+	display:none;  
+}
+.skip
+{
+	position: fixed;
+	top:10px;
+	right:30px;
+	color:red;
+
+}
+body
+{
+	overflow:hidden;
+
+}
+span {position:absolute;font-family: 微软雅黑; font-weight: bold;}

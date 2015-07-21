@@ -14,6 +14,7 @@ var addBloodRadius = 170;											//可以回血的大本营范围
 var addBloodRate = 0.01;											//单个间隔血量增加的百分比
 var cxtCopy=CanvasCopy.getContext("2d");							//绘画的句柄
 var nowMouseX, nowMouseY;											//当前鼠标位置，相对全图
+var nowAction = 0;													//当前给玩家控制英雄的指令
 var soldierAllHp = 300, soldierAttack = 20;							//小兵的血量、攻击力
 var soldierAttackInterval = 1000, soldierSpeed = 10;				//小兵的攻击间隔(ms)，移动速度
 var soldierMakeExp = 50; soldierAttackRadius= 22;					//小兵死亡所提供的经验、攻击范围
@@ -170,6 +171,7 @@ var soldierClass ={								//小兵的对象
 		soldierRet.action = {kind:direct + 3, frame:0};																					//初始为移动状态
 		soldierRet.makeExp = soldierMakeExp;
 		soldierRet.perform = function(kind){																							//每回合执行的操作函数
+			var minDis = 100000000, minObj;
 			if (soldierRet.attackWait > 0)																								//CD时间减少
 				soldierRet.attackWait--;
 			soldierRet.action.frame = (soldierRet.action.frame + 1) % actionFlash[soldierRet.action.kind].len;							//画面播放帧数增加
@@ -181,7 +183,6 @@ var soldierClass ={								//小兵的对象
 				soldierRet.action.frame = 0;
 				soldierRet.target = null;
 			}
-			var minDis = 100000000, minObj;
 			for (var i = 0; i < Soldiers[1 - kind].length; i++){																						//以下为获取距当前对象最近的敌对对象
 				var p = getDis(soldierRet.positionX, soldierRet.positionY, Soldiers[1 - kind][i]);
 				if (p < minDis && Soldiers[1 - kind][i].nowHp > 0){
@@ -309,7 +310,6 @@ var heroClass ={									//玩家控制英雄的对象
 		heroRet.speed = 20;														//移动速度
 		heroRet.exp = 0;														//英雄的经验
 		heroRet.level = 1;														//英雄的等级
-		heroRet.nowAction = 0;
 		heroRet.skills = [{attack : 60, attackRadius : 45, attackInterval : Math.round(1000 / frameTime), attackWait : 0},
 					   {attackRate:1, speedRate:1, attackInterval : Math.round(8000 / frameTime), buffLast:Math.round(4000 / frameTime), attackWait:0},
 					   {attackRate:0.4, attack:0, attackInterval:Math.round(10000 / frameTime), attackWait:0, attackRadius:110},
@@ -325,7 +325,7 @@ var heroClass ={									//玩家控制英雄的对象
 		heroRet.target = null;													//当前正在攻击的对象
 		heroRet.positionObj = null;												//当前正在追逐的对象(右键点击)只能为敌对对象
 		heroRet.positionTo = null;												//当前正在追逐的点(右键点击)
-		heroRet.perform = function(kind){						//玩家控制英雄的行为
+		heroRet.perform = function(){						//玩家控制英雄的行为
 			heroRet.action.frame = (heroRet.action.frame + 1) % actionFlash[heroRet.action.kind].len;						//画面播放帧数增加
 			for (var i = 0; i < heroRet.buff.length; i++){
 				heroRet.buff[i].buffLast--;
@@ -365,28 +365,22 @@ var heroClass ={									//玩家控制英雄的对象
 				heroRet.action.kind = 12 - heroRet.action.kind % 2;
 				heroRet.action.frame = 0;
 			}
-			if (kind == 1){
-				heroRet.getAI(kind);
-			}
 			if (heroRet.positionObj != null && heroRet.positionObj.nowHp <= 0)
 				heroRet.positionObj = null;
 			if (checkHeroAttackKind(heroRet.action.kind) < 0){														//当前为非进攻状态时
-				if (heroRet.nowAction == 1 && heroRet.skills[1].attackWait == 0){
-					fighter_q.play();
+				if (nowAction == 1 && heroRet.skills[1].attackWait == 0){
 					heroRet.buff.push({attack:heroRet.skills[0].attack * heroRet.skills[1].attackRate, speed:heroRet.speed * heroRet.skills[1].speedRate, buffLast:heroRet.skills[1].buffLast});
 					heroRet.skills[1].attackWait = heroRet.skills[1].attackInterval;
-					heroRet.nowAction = 0;
+					nowAction = 0;
 				}
-				else if (heroRet.nowAction == 2 && heroRet.skills[2].attackWait == 0){
-					fighter_w.play();
+				else if (nowAction == 2 && heroRet.skills[2].attackWait == 0){
 					heroRet.action.kind = 21;
 					heroRet.action.frame = 0;
 					heroRet.skills[2].attackWait = heroRet.skills[2].attackInterval;
 					heroRet.skills[2].attack = heroRet.skills[0].attack * (1 + heroRet.skills[2].attackRate);
-					heroRet.nowAction = 0;
+					nowAction = 0;
 				}
-				else if (heroRet.nowAction == 3 && heroRet.skills[3].attackWait == 0){
-					fighter_e.play();
+				else if (nowAction == 3 && heroRet.skills[3].attackWait == 0){
 					if (nowMouseX < heroRet.positionX)
 						heroRet.action.kind = 23;
 					else
@@ -410,14 +404,13 @@ var heroClass ={									//玩家控制英雄的对象
 					heroRet.skills[3].targetX = nowMouseX + (nowMouseX - px) * q;
 					heroRet.skills[3].targetY = nowMouseY + (nowMouseY - py) * q;
 					heroRet.skills[3].attack = heroRet.skills[0].attack * (1 + heroRet.skills[3].attackRate);
-					heroRet.nowAction = 0;
+					nowAction = 0;
 				}
 				else if (heroRet.positionObj != null){																			//当前有追逐对象时
 					var temObj = heroRet.positionObj;
 					var p = getDis(heroRet.positionX, heroRet.positionY, temObj);
 					if (p < heroRet.skills[0].attackRadius + 1){																		//在攻击范围内则攻击
-						if (heroRet.skills[0].attackWait === 0){
-							fighter_a.play();																	//无CD时间时开始攻击
+						if (heroRet.skills[0].attackWait === 0){																		//无CD时间时开始攻击
 							heroRet.skills[0].attackWait = heroRet.skills[0].attackInterval;
 							heroRet.target = temObj;
 							heroRet.action.frame = 0;
@@ -507,60 +500,7 @@ var heroClass ={									//玩家控制英雄的对象
 					heroRet.skills[3].positionY = pObj.positionY;
 			}
 		}
-		heroRet.getAI = function(kind){								//电脑AI的行为
-			heroRet.positionTo = null;
-			heroRet.positionObj = null;
-			heroRet.nowAction = 0;
-			if (heroRet.nowHp <= 0.2 * heroRet.allHp){
-				heroRet.positionTo = {x:3500, y:400};
-				return;
-			}
-			if (((kind == 1 && heroRet.positionX > 3600 - addBloodRadius)||(kind == 0 && heroRet.positionX < addBloodRadius)) && heroRet.nowHp < heroRet.allHp){
-				return;
-			}
-			var minDis = 100000000, minObj;
-			for (var i = 0; i < Soldiers[1 - kind].length; i++){																						//以下为获取距当前对象最近的敌对对象
-				var p = getDis(heroRet.positionX, heroRet.positionY, Soldiers[1 - kind][i]);
-				if (p < minDis && Soldiers[1 - kind][i].nowHp > 0){
-					minDis = p;
-					minObj = Soldiers[1 - kind][i];
-				}
-			}
-			for (var i = 0; i < Towers[1 - kind].length; i++){
-				var p = getDis(heroRet.positionX, heroRet.positionY, Towers[1 - kind][i]);
-				if (p < minDis && Towers[1 - kind][i].nowHp > 0){
-					minDis = p;
-					minObj = Towers[1 - kind][i];
-				}
-			}
-			for (var i = 0; i < Heroes[1 - kind].length; i++){
-				var p = getDis(heroRet.positionX, heroRet.positionY, Heroes[1 - kind][i]);
-				if (kind == 1 && i == 0 && p < heroRet.skills[3].attackSpeed * 5 && heroRet.skills[3].attackWait == 0)
-				{
-					nowMouseX = Heroes[0][0].positionX;
-					nowMouseY = Heroes[0][0].positionY;
-					heroRet.nowAction = 3;
-					return;
-				}
-				if (p < minDis && Heroes[1 - kind][i].nowHp > 0){
-					minDis = p;
-					minObj = Heroes[1 - kind][i];
-				}
-			}
-			var p = getDis(heroRet.positionX, heroRet.positionY, baseCamp[1 - kind]);
-			if (p < minDis && baseCamp[1 - kind].nowHp > 0){
-				minDis = p;
-				minObj = baseCamp[1 - kind];
-			}
-			if (minDis < heroRet.skills[2].attackRadius && heroRet.skills[2].attackWait == 0){
-				heroRet.nowAction = 2;
-				return;
-			}
-			heroRet.positionObj = minObj;
-			if (heroRet.skills[1].attackWait == 0){
-				heroRet.nowAction = 1;
-			}
-			
+		heroRet.performAI = function(kind){								//电脑AI的行为
 		}
 		heroRet.attacked = function(attackNum, obj){							//收到伤害
 			heroRet.nowHp -= attackNum;
@@ -568,6 +508,13 @@ var heroClass ={									//玩家控制英雄的对象
 		return heroRet;
 	}
 };
+
+var heroAIClass ={				//电脑控制英雄的对象
+	
+}
+
+
+
 
 
 
@@ -648,7 +595,7 @@ var campClass ={															//大本营的对象
 		campRet.right = 58;
 		campRet.bottom = 25;
 		campRet.top = 94;
-		campRet.allHp = campAllHp;
+		campRet.allHp = campSoldierInterval;
 		campRet.nowHp = campRet.allHp;
 		campRet.kind = kidType;							//大本营属于哪一方
 		campRet.soldierInterval = Math.round(campSoldierInterval / frameTime);						//一批兵间隔
@@ -673,9 +620,11 @@ var campClass ={															//大本营的对象
 };
 
 window.onmousemove = function(e) {	
-	if (window.event) e = window.event;
-		xm = (e.x || e.clientX) - (nx  * .5) + dim * .5;
-		ym = (e.y || e.clientY) - (ny * .5) + dim * .5;												//鼠标移动事件的响应，用于靠左、靠右移动画面
+	if(mode === 2){
+		if (window.event) e = window.event;
+	xm = (e.x || e.clientX) - (nx  * .5) + dim * .5;
+	ym = (e.y || e.clientY) - (ny * .5) + dim * .5;//这三行是我的开始动画要用的
+	}												//鼠标移动事件的响应，用于靠左、靠右移动画面
    	var tx = e.pageX - CanvasCopy.getBoundingClientRect().left;
 	var ty = e.pageY - CanvasCopy.getBoundingClientRect().top;
 	nowMouseX = tx + allPicLeft;
@@ -692,15 +641,15 @@ window.onmousemove = function(e) {
 }
 window.onkeydown = function(e){
 	if (e.keyCode == 81){
-		Heroes[0][0].nowAction = 1;
+		nowAction = 1;
 	}
 	else if (e.keyCode == 87){
-		Heroes[0][0].nowAction = 2;
+		nowAction = 2;
 		Heroes[0][0].positionObj = null;
 		Heroes[0][0].positionTo = null;
 	}
 	else if (e.keyCode == 69){
-		Heroes[0][0].nowAction = 3;
+		nowAction = 3;
 		Heroes[0][0].positionObj = null;
 		Heroes[0][0].positionTo = null;
 	}
@@ -716,7 +665,7 @@ CanvasCopy.onmousedown = function(e) {													//鼠标点击事件的响应
     if (e.button==2)																	//鼠标右击为英雄的移动攻击
     {
 		var clickObj = getClickObj(tx, ty, 1);
-		Heroes[0][0].nowAction = 0;
+		nowAction = 0;
 		if (clickObj == null){		//移动到该位置
 			Heroes[0][0].positionTo = {x:tx, y:ty};
 			Heroes[0][0].positionObj = null;
@@ -745,7 +694,6 @@ function initial(){																			//初始化过程
 	Towers[1].push(towerClass.createNew(3146.18,532.18,3142.18,421.18,35,35,118.5,11,37,74,141, 'towerSmall', 1));
 	Towers[1].push(towerClass.createNew(2226,413,2221,268,47,47,157.5,21,53.5,75,161, 'towerBig', 1));
 	Heroes[0].push(heroClass.createNew(100, 400, 0));																	//加入英雄
-	Heroes[1].push(heroClass.createNew(3500, 400, 1));																	//加入英雄
 	setInterval(cycleOperation, frameTime);					//计时函数
 
 }
@@ -758,10 +706,10 @@ function cycleOperation(){										//定时执行
 		for (var i = 0; i < Towers[k].length; i++){
 			Towers[k][i].perform(k);
 		}
-	for (var k = 0; k < 2; k++)										//两方英雄行动
-		for (var i = 0; i < Heroes[k].length; i++){
-			Heroes[k][i].perform(k);
-		}
+	Heroes[0][0].perform();											//己方英雄行动
+	for (var i = 0; i < Heroes[1].length; i++){						//敌方英雄行动
+		Heroes[1][i].performAI(1);
+	}
 	for (var k = 0; k < 2; k++)										//大本营行动
 		baseCamp[k].perform(k);
 	if (screenMoveflag === 1)										//判断画面是否移动
@@ -889,12 +837,12 @@ function drawNowHp(drawObj){//推荐英雄血量在700-2000之间
 	{
 		bloodheight = 16;
 		cxt.fillStyle = 'rgb(69,79,81)';
-		cxt.fillRect(drawObj.positionX - bloodhalfwidth - allPicLeft, drawObj.positionY  - drawObj.top - bloodheight - headtoblood, 2 * bloodhalfwidth, bloodheight);//allHp
+		cxt.fillRect(drawObj.positionX - bloodhalfwidth - allPicLeft, drawObj.positionY  - drawObj.top - bloodheight - headtoblood, 2 * bloodhalfwidth, bloodheight);//allHP
 		var rate = drawObj.nowHp / drawObj.allHp;
 		cxt.fillStyle = 'rgb(26,184,63)';
 		var hundrednum = Math.round(drawObj.nowHp / 100);
 		var nowHpWidth = (2 * bloodhalfwidth) * rate;
-		cxt.fillRect(drawObj.positionX - bloodhalfwidth - allPicLeft, drawObj.positionY  - drawObj.top - bloodheight - headtoblood, nowHpWidth, bloodheight);//nowHp
+		cxt.fillRect(drawObj.positionX - bloodhalfwidth - allPicLeft, drawObj.positionY  - drawObj.top - bloodheight - headtoblood, nowHpWidth, bloodheight);//nowHP
 		cxt.fillStyle = 'rgb(2,64,85)';
 		cxt.strokeStyle = 'rgb(245,250,42)';
 		cxt.beginPath();
@@ -911,10 +859,10 @@ function drawNowHp(drawObj){//推荐英雄血量在700-2000之间
 	else
 	{
 	cxt.fillStyle = 'rgb(69,79,81)';
-	cxt.fillRect(drawObj.positionX - drawObj.left - allPicLeft, drawObj.positionY  - drawObj.top - bloodheight - headtoblood, drawObj.left + drawObj.right, bloodheight);//allHp
+	cxt.fillRect(drawObj.positionX - drawObj.left - allPicLeft, drawObj.positionY  - drawObj.top - bloodheight - headtoblood, drawObj.left + drawObj.right, bloodheight);//allHP
 	var rate = drawObj.nowHp / drawObj.allHp;
 	cxt.fillStyle = 'rgb(26,184,63)';
-	cxt.fillRect(drawObj.positionX - drawObj.left - allPicLeft, drawObj.positionY  - drawObj.top - 15, (drawObj.left + drawObj.right) * rate, 5);//nowHp
+	cxt.fillRect(drawObj.positionX - drawObj.left - allPicLeft, drawObj.positionY  - drawObj.top - 15, (drawObj.left + drawObj.right) * rate, 5);//nowHP
 	}
 	
 }
@@ -935,7 +883,8 @@ function paintOn()													//将所有图画到canvas上
 		for (var i = 0; i < Heroes[k].length; i++)
 			allObject.push(Heroes[k][i]);
 	allObject.sort(checkSort);
-	var img1 = allImg[allImg.length - 3];
+	var img1 = new Image();
+	img1.src= 'images/mappic/background.png';
 	cxt.drawImage(img1, 0 - allPicLeft, 0);
 	for (var k = 0; k < 2; k++)
 		for (var i = 0; i < Towers[k].length; i++)
@@ -944,22 +893,23 @@ function paintOn()													//将所有图画到canvas上
 	drawNowHp(baseCamp[0]);
 	drawNowHp(baseCamp[1]);
 	for (var i = 0; i < allObject.length; i++){
-		var img;
+		var img = new Image();
 		if (allObject[i].idType == 'towerBig')
-			img = allImg[allImg.length - 5];
+			img.src = 'images/mappic/tower_big.png';
 		else if (allObject[i].idType == 'towerSmall')
-			img = allImg[allImg.length - 4];
+			img.src = 'images/mappic/tower_home.png';
 		else if (allObject[i].idType == 'Hero'){
-			img= actionFlash[allObject[i].action.kind].src[0][allObject[i].action.frame];
+			img.src= actionFlash[allObject[i].action.kind].src[0][allObject[i].action.frame];
 			if (checkHeroAttackKind(allObject[i].action.kind) == 0){
 				if (allObject[i].buff.length > 0){
-					img= actionFlash[allObject[i].action.kind + 14].src[0][allObject[i].action.frame];
+					img.src= actionFlash[allObject[i].action.kind + 14].src[0][allObject[i].action.frame];
 					if (allObject[i].action.frame == actionFlash[allObject[i].action.kind + 14].len - 1)
 						allObject[i].buff.splice(0, 1);
 				}
 			}
 			else if (checkHeroAttackKind(allObject[i].action.kind) == 2){
-				var img1 = actionFlash[22].src[0][allObject[i].action.frame];
+				var img1 = new Image();
+				img1.src = actionFlash[22].src[0][allObject[i].action.frame];
 				cxt.drawImage(img1, allObject[i].positionX - 289 - allPicLeft, allObject[i].positionY - 416);
 			}
 			else if (checkHeroAttackKind(allObject[i].action.kind) == 3 && allObject[i].action.frame >= 2){
@@ -986,12 +936,12 @@ function paintOn()													//将所有图画到canvas上
 //				alert(12345);
 		}
 		else
-			img = actionFlash[allObject[i].action.kind].src[allObject[i].kind][allObject[i].action.frame];
+			img.src= actionFlash[allObject[i].action.kind].src[allObject[i].kind][allObject[i].action.frame];
 		if ((allObject[i].idType == 'towerBig' || allObject[i].idType == 'towerSmall')&&allObject[i].nowHp <= 0){
 			if (allObject[i].idType == 'towerBig')
-				img = allImg[allImg.length - 2];
+				img.src = 'images/mappic/tower_big_destroyed.png';
 			else
-				img = allImg[allImg.length - 1];
+				img.src = 'images/mappic/tower_home_destroyed.png';
 		}
 		if (allObject[i].nowHp > 0)
 			drawNowHp(allObject[i]);
