@@ -1,5 +1,6 @@
 //关于action对象的frame参数为当前播放到的帧数，kind参数为行为
-//1、2:英雄行走(left,right) 3、4:小兵行走(left,right) 5、6:英雄攻击(left,right) 7、8:小兵攻击(left,right) 9:塔攻击 11、12: 英雄站立(left,right) 13、14:小兵站立(left,right) 15,16:英雄死亡 17,18:小兵死亡
+//1、2:英雄行走(left,right) 3、4:小兵行走(left,right) 5、6:英雄攻击(left,right) 7、8:小兵攻击(left,right) 9:塔攻击 11、12: 英雄站立(left,right) 13、14:小兵站立(left,right) 15、16:英雄死亡 17、18:小兵死亡
+//19、20:英雄技能一 21、22:英雄技能二  23、24:英雄技能三
 var Soldiers = [[],[]];												//所有小兵的对象数组
 var Towers = [[],[]], destroyedTowers =[[],[]];						//所有防御塔的对象数组
 var Heroes = [[],[]];												//所有英雄的对象数组
@@ -12,6 +13,8 @@ var screenMoveBorder = 20;											//响应移动判定的边界距离
 var addBloodRadius = 170;											//可以回血的大本营范围
 var addBloodRate = 0.01;											//单个间隔血量增加的百分比
 var cxt=myCanvas.getContext("2d");									//绘画的句柄
+var nowMouseX, nowMouseY;											//当前鼠标位置，相对全图
+var nowAction = -1;													//当前给玩家控制英雄的指令
 var soldierAllHp = 300, soldierAttack = 20;							//小兵的血量、攻击力
 var soldierAttackInterval = 1000, soldierSpeed = 10;				//小兵的攻击间隔(ms)，移动速度
 var soldierMakeExp = 50; soldierAttackRadius= 22;					//小兵死亡所提供的经验、攻击范围
@@ -236,7 +239,20 @@ var soldierClass ={								//小兵的对象
 		return soldierRet;
 	}
 };
-
+function checkHeroAttackKind(kind){
+	if (kind === 1 || kind === 2)
+		return - 2;
+	else if (kind === 5 || kind === 6)
+		return 0;
+	else if (kind === 11 || kind === 12)
+		return -1;
+	else if (kind === 19 || kind === 20)
+		return 1;
+	else if (kind === 21 || kind === 22)
+		return 2;
+	else if (kind === 23 || kind === 24)
+		return 3;
+}
 var heroClass ={									//玩家控制英雄的对象
 	createNew : function(px, py, kindHero){
 		var heroRet = {};
@@ -252,10 +268,13 @@ var heroClass ={									//玩家控制英雄的对象
 		heroRet.top = 160 * 0.7 + 28;
 		heroRet.bottom = 0;
 		heroRet.speed = 20;														//移动速度
-		heroRet.attack = 60;													//伤害
-		heroRet.attackRadius = 40;												//攻击范围
-		heroRet.attackInterval = Math.round(1000 / frameTime);					//攻击间隔
-		heroRet.attackWait = 0;													//当前CD时间
+		heroRet.exp = 0;														//英雄的经验
+		heroRet.level = 1;														//英雄的等级
+		hero.skills = [{attack : 60, attackRadius : 40, attackInterval = Math.round(1000 / frameTime), attackWait : 0},
+					   {},
+					   {},
+					   {}];
+		]
 		heroRet.allHp = 1000;
 		heroRet.nowHp = heroRet.allHp;
 		heroRet.deathCD = Math.round(10000 / frameTime);
@@ -266,19 +285,23 @@ var heroClass ={									//玩家控制英雄的对象
 		heroRet.positionTo = null;												//当前正在追逐的点(右键点击)
 		heroRet.perform = function(){						//玩家控制英雄的行为
 			heroRet.action.frame = (heroRet.action.frame + 1) % actionFlash[heroRet.action.kind].len;						//画面播放帧数增加
-			if (heroRet.attackWait > 0)																						//CD时间减少
-				heroRet.attackWait--;
+			for (var i = 0; i < 4; i++)
+				if (heroRet.skills[i].attackWait > 0)																		//CD时间减少
+					heroRet.skills[i].attackWait--;
+			
 			if (heroRet.nowHp <= 0)																							//英雄死亡时不执行
 				return;
-			if ((heroRet.action.kind === 5 || heroRet.action.kind === 6) && heroRet.action.frame === 0){					//英雄一次攻击结束，转为静止状态
-				heroRet.target.attacked(heroRet.attack);																	//对目标造成伤害
+			
+			if (checkHeroAttackKind(heroRet.action.kind) >= 0 && heroRet.action.frame === 0){					//英雄一次攻击结束，转为静止状态
+				
+				heroRet.target.attacked(heroRet.attack);
 				heroRet.target = null;
 				heroRet.action.kind = heroRet.action.kind + 6;
 				heroRet.action.frame = 0;
 			}
 			if (heroRet.positionObj != null && heroRet.positionObj.nowHp <= 0)
 				heroRet.positionObj = null;
-			if (heroRet.action.kind != 5 && heroRet.action.kind != 6){														//当前为非进攻状态时
+			if (checkHeroAttackKind(heroRet.action.kind) < 0){														//当前为非进攻状态时
 				if (heroRet.positionObj != null){																			//当前有追逐对象时
 					var temObj = heroRet.positionObj;
 					var p = getDis(heroRet.positionX, heroRet.positionY, temObj);
@@ -342,6 +365,15 @@ var heroClass ={									//玩家控制英雄的对象
 		return heroRet;
 	}
 };
+
+var heroAIClass ={				//电脑控制英雄的对象
+
+}
+
+
+
+
+
 
 var towerClass ={									//塔的对象
 	createNew : function(px, py, qx, qy,pleft,pright,ptop,pbuttom,pradius,picx,picy, id){
@@ -446,6 +478,8 @@ var campClass ={															//大本营的对象
 window.onmousemove = function(e) {													//鼠标移动事件的响应，用于靠左、靠右移动画面
    	var tx = e.pageX - myCanvas.getBoundingClientRect().left;
 	var ty = e.pageY - myCanvas.getBoundingClientRect().top;
+	nowMouseX = tx + allPicLeft;
+	nowMouseY = ty;
 	if (tx < 0)
 		e.pageX = myCanvas.getBoundingClientRect().left;
 	if (tx > cxt.canvas.width)
@@ -551,7 +585,7 @@ function checkDead(){													//判断游戏死亡
 						Heroes.action.kind = 12 - k;
 						Heroes.action.frame = 0;
 					}
-					if (Heroes[k][i].action.kind >= 15 && Heroes[k][i].action.frame == 0){
+					if ((Heroes[k][i].action.kind === 15 || Heroes[k][i].action.kind === 16)&& Heroes[k][i].action.frame == 0){
 						Heroes[k][i].positionObj = null;
 						Heroes[k][i].positionTo = null;
 						Heroes[k][i].positionY = 400;
@@ -566,7 +600,7 @@ function checkDead(){													//判断游戏死亡
 			else if ((k == 0 && Heroes[k][i].positionX <= addBloodRadius)||(k == 1 && Heroes[k][i].positionX >= 3600 - addBloodRadius)){
 				Heroes[k][i].nowHp = Math.round(Heroes[k][i].nowHp + Heroes[k][i].allHp * addBloodRate);
 				if (Heroes[k][i].nowHp > Heroes[k][i].allHp)
-					Heroes[k][i].nowHP = Heroes[k][i].allHp;
+					Heroes[k][i].nowHp = Heroes[k][i].allHp;
 			}
 		}
 }
