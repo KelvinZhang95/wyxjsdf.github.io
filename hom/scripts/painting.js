@@ -878,8 +878,7 @@ function paintOn()													//将所有图画到canvas上
 		for (var i = 0; i < Heroes[k].length; i++)
 			allObject.push(Heroes[k][i]);
 	allObject.sort(checkSort);
-	var img1 = new Image();
-	img1.src= 'images/mappic/background.png';
+	var img1 = allImg[allImg.length - 3];
 	cxt.drawImage(img1, 0 - allPicLeft, 0);
 	for (var k = 0; k < 2; k++)
 		for (var i = 0; i < Towers[k].length; i++)

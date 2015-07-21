@@ -95,7 +95,7 @@ var allPicSrc= [];
 		allImg[i].src = allPicSrc[i];
 		allImg[i].onload = function(){
 			sum++;
-			if (sum == allPicSrc.length){
+			if (sum == (allPicSrc.length - 6) * 2 + 6){
 			initial();
 			}
 		}
