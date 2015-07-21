@@ -89,10 +89,16 @@ var allPicSrc= [];
 	allPicSrc.push('images/mappic/background.png');
 	allPicSrc.push('images/mappic/tower_big_destroyed.png');
 	allPicSrc.push('images/mappic/tower_home_destroyed.png');
-	var allImg = [];
+	var allImg = [], sum = 0;
 	for (var i = 0; i < allPicSrc.length; i++){
 		allImg[i] = new Image();
 		allImg[i].src = allPicSrc[i];
+		allImg[i].onload = function(){
+			sum++;
+			if (sum == allPicSrc.length){
+			initial();
+			}
+		}
 	}
 	var sum = 0;
 	for (var i = 0; i < actionFlash.length ;i++){
@@ -102,7 +108,7 @@ var allPicSrc= [];
 					actionFlash[i].src[k].push(allImg[sum]);
 				}
 	}
-	initial();
+	
 </script>
 </body>
 </html>
