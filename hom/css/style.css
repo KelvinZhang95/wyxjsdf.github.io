@@ -12,10 +12,192 @@ a,img{border:0;}
     font-style: normal;
 
 }
+#replaybutton
+{
+
+  width:40px; 
+  height:40px; 
+  text-align:center; 
+  background:#b8f4ff; 
+  position:absolute; 
+  top: 300px;
+  left: 300px;
+  cursor:pointer; 
+  color:#6f8182;
+  display: none;
+}
+#replaybutton:hover
+{
+
+	  width:40px; 
+  height:40px; 
+   text-align:center; 
+  background:rgb(255,10,67); 
+  position:absolute; 
+  top: 300px;
+  left: 300px;
+  cursor:pointer; 
+  color:rgb(242,242,242);
+}
 #status_bar
 {
 	width : 1200px; 
-	height: 600px;
+	height: 60px;
+	margin:0 auto;
+	/*overflow:none;*/
+	/*position: fixed;*/
+	/*top:600px;*/
+	float:top;
+	background-color: rgb(69,69,69);
+	overflow:hidden;
+	text-align: center;
+	color: #222;
+	text-shadow: 0px 4px 6px #555;
+	color : white;
+	font-weight: bold;
+	font-family: fzjinglei;
+	font-size: 36px;
+	/*不可被选中*/
+	-webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+}
+#status_bar #status_1
+{
+	height: 100%;
+	float: left;
+
+}
+#status_bar #status_1 #name
+{
+	height: 100%;
+
+	float: left;
+
+}
+#status_bar #status_1 #name #hero
+{
+	float: top;
+	height:50%;
+	line-height:30px;
+
+}
+#status_bar #status_1 #name #string
+{
+	float: top;
+	height:50%;
+	line-height:30px;
+
+}
+#status_bar #status_1 #level_ad
+{
+	height: 100%;
+	float: left;
+}
+#status_bar #status_1 #level_ad #level
+{
+	float: top;
+	height:50%;
+	line-height:30px;
+}
+#status_bar #status_1 #level_ad #ad
+{
+	float: top;
+	height:50%;
+	line-height:30px;
+}
+#status_bar #status_1 #hp_buff
+{
+	height: 100%;
+	float: left;
+	
+}
+#status_bar #status_1 #hp_buff #hp
+{
+	float: top;
+	height:50%;
+	line-height:30px;
+
+}
+#status_bar #status_1 #hp_buff #buff
+{
+	float: top;
+	height:50%;
+	line-height:30px;
+
+}
+#status_bar #status_2
+{
+	height: 100%;
+	float: left;
+}
+#status_bar #status_2 #q_skill
+{
+	height: 100%;
+	float: left;
+	box-shadow: 3px 3px 3px #666;  
+}
+#status_bar #status_2 #q_skill #bigq
+{
+	float: left;
+	width:30%;
+	line-height:60px;
+	font-size: 60px;
+
+}
+#status_bar #status_2 #q_skill #q_cd
+{
+	float: left;
+	width:70%;
+	line-height:60px;
+	
+}
+#status_bar #status_2 #w_skill
+{
+	height: 100%;
+	width: 133px;
+	float: left;
+	box-shadow: 3px 3px 3px #666;  
+}
+#status_bar #status_2 #w_skill #bigw
+{
+	float: left;
+	width:30%;
+	line-height:60px;
+	font-size: 60px;
+}
+#status_bar #status_2 #w_skill #w_cd
+{
+	float: left;
+	width:70%;
+	line-height:60px;
+}
+#status_bar #status_2 #e_skill
+{
+	height: 100%;
+	width: 133px;
+	float: left;
+}
+#status_bar #status_2 #e_skill #bige
+{
+	float: left;
+	width:30%;
+	line-height:60px;
+	font-size: 60px;
+}
+#status_bar #status_2 #e_skill #e_cd
+{
+	float: left;
+	width:70%;
+	line-height:60px;
+}
+
+#status_bar #status_3
+{
+	height: 100%;
+	width: 400px;
+	float: left;
 }
 .play
 {
@@ -85,6 +267,7 @@ a,img{border:0;}
 body
 {
 	overflow:hidden;
+	background-image:url("../images/other/beijing.jpg");
 
 }
 span {position:absolute;font-family: 微软雅黑; font-weight: bold;}

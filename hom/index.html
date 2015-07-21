@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel='stylesheet' type='text/css' href='css/style.css'>
@@ -26,11 +25,48 @@
 </div>
 
 
-<div class = "canvas" style="margin:0 auto; width : 100%; height:600px; top:10px; position:relative; display:none">
+<div class = "canvas" style="margin:0 auto; width : 100%; height:100%; top:0; position:relative; display:none">
 <canvas id="myCanvas" width = "1200" height="600" style="margin:0 auto; display:block; overflow:none" >
 </canvas>
-<div id = "status_bar">
+	<div id = "status_bar">
+		<div id = "status_1">
+			<div id = "name">
+				<div id = "hero">HERO:</div>
+				<div id = "string">Jarven</div>
+			</div>
+			<div id = "level_ad">
+				<div id = "level">Speed:50(+20)</div>
+				<div id = "ad">AD:100(+80)</div>
+			</div>
+			<div id = "hp_buff">
+				<div id = "hp">HP:900/1000</div>
+				<div id = "buff">level: 1 (3000/4000)</div>
+			</div>
+		</div>
+		<div id = "status_2">
+			<div id = "q_skill">
+				<div id = "bigq">&nbsp&nbspQ:</div>
+				<div id = "q_cd">10</div>
+			</div>
+			<div id = "w_skill">
+				<div id = "bigw">&nbsp&nbspW:</div>
+				<div id = "w_cd">6</div>
+			</div>
+			<div id = "e_skill">
+				<div id = "bige">&nbsp&nbspE:</div>
+				<div id = "e_cd">30</div>
+			</div>
+		</div>
+		<div id = "status_3">
+			<div></div><div></div><div></div>
+		</div>
+
+	</div>
 </div>
+
+<div id = "replaybutton" onclick = initial()>
+重新开始
+
 </div>
 
 <audio src="mp3/fight_back.mp3" id = "fight_back" preload = "auto" loop = "loop" volume = "0.2">

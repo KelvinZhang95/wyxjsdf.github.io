@@ -75,6 +75,8 @@ function skip(){
 	if (!flag)
 		return;
 	mode = 3;
+	//$("body").overflow = "scroll";
+	document.body.style.overflow = "scroll";
 	beijing.pause();
 	fight_back.play();
 	fight_back.volume = 0.3;

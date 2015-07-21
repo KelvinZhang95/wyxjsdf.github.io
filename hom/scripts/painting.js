@@ -1,6 +1,7 @@
 //关于action对象的frame参数为当前播放到的帧数，kind参数为行为
 //1、2:英雄行走(left,right) 3、4:小兵行走(left,right) 5、6:英雄攻击(left,right) 7、8:小兵攻击(left,right) 9:塔攻击 11、12: 英雄站立(left,right) 13、14:小兵站立(left,right) 15、16:英雄死亡 17、18:小兵死亡
 //19、20:英雄技能一 21、22:英雄技能二  23、24:英雄技能三
+var MyInterval;
 var Soldiers;														//所有小兵的对象数组
 var Towers, destroyedTowers;										//所有防御塔的对象数组
 var Heroes;															//所有英雄的对象数组
@@ -15,19 +16,42 @@ var addBloodRate = 0.01;											//单个间隔血量增加的百分比
 var cxtCopy=CanvasCopy.getContext("2d");							//绘画的句柄
 var nowMouseX, nowMouseY;											//当前鼠标位置，相对全图
 var soldierAllHp = 300, soldierAttack = 20;							//小兵的血量、攻击力
+var soldierAttackRadius = 22;										//小兵的攻击范围
 var soldierAttackInterval = 1000, soldierSpeed = 10;				//小兵的攻击间隔(ms)，移动速度
-var soldierMakeExp = 50; soldierAttackRadius= 22;					//小兵死亡所提供的经验、攻击范围
+var soldierMakeExp = 20, soldierMakeHp = 10;						//小兵死亡所提供的经验、最后一击血量
 var towerAllHp = 2000, towerAttack = 5, towerAttackRadius = 150;	//塔的血量、攻击力、攻击距离（塔为放射型攻击）
-var towerMakeExp = 500;												//塔毁灭所提供的经验
+var towerMakeExp = 150, towerMakeHp = 80;							//塔毁灭所提供的经验、最后一击血量
 var campAllHp = 3000, campSoldierInterval = 30000;					//大本营的血量、大本营出兵的间隔
 var camSoldierNum = 3;												//大本营一次出兵的数量
+var heroMakeExp = 100, heroMakeHp = 50;								//击杀英雄所提供的经验、最后一击血量
+var heroAttackRadius = 45, heroAttackInterval = 1000;				//英雄普通攻击范围、间隔
+var heroSkill2Radius = 150, heroSkill3Speed = 100;					//英雄技能二攻击范围，技能三攻击速度
+var heroSkill3Border = 10;											//英雄技能三攻击速度
+var getExpRadius = 300;												//获取经验的间距
+var expLevel = [100, 300, 600, 1000, 1500, 2100, 2700, 3300, 3900, 100000];								//等级对应经验值
+var levelMax = 10;													//最大等级
+var gameover_kind,gameover_frame flagDebug1 = false, flagDebug2 = false;
 
-var myCanvas = document.createElement('canvas');
+
+var attackLevel = [60, 65, 70,75, 80, 85, 90, 95, 100, 105];									//英雄物理攻击
+var speedLevel = [16, 16, 17, 17, 18, 18, 19, 19, 20, 20];										//英雄的速度
+var HpLevel = [1000, 1120, 1240, 1360, 1480, 1600, 1720, 1840, 1960, 2080];						//英雄生命值
+var skill1AttackLevel = [1, 1, 1.2, 1.2, 1.2, 1.4, 1.4, 1.4, 1.6, 1.6];							//技能一攻击加成
+var skill2AttackLevel = [1, 1, 1.2, 1.2, 1.2, 1.4, 1.4, 1.4, 1.6, 1.6];							//技能二攻击加成
+var skill3AttackLevel = [2.7, 2.7, 3.0, 3.0, 3.5, 3.5, 3.5, 3.8, 3.8, 4.1];						//技能三攻击加成
+var skill1SpeedLevel = [0.9, 0.9, 0.9, 1.0, 1.0, 1.0, 1.1, 1.1, 1.2, 1.2];						//技能一移动速度加成
+var skill1BuffLevel = [4000, 4000, 4000, 4000, 4000, 4500, 4500, 4500, 4500, 5000];				//技能一buff时间
+var skill1CDLevel = [8000, 8000, 7500, 7500, 7500, 7000, 7000, 7000, 6500, 6500];				//技能一CD时间
+var skill2CDLevel = [10000, 10000, 9500, 9500, 9000, 9000, 8500, 8500, 8000, 8000];				//技能二CD时间
+var skill3CDLevel = [35000, 34000, 33000, 32000, 31000, 30000, 29000, 28000, 27000, 26000];		//技能三CD时间
+var deathLevel = [10000, 10000, 12000, 12000, 12000, 12000, 12000, 13000, 13000, 13000];		//英雄死亡等待时间
+
+var myCanvas = document.createElement('canvas');					//用于双缓冲的画布
 var cxt = myCanvas.getContext("2d");
-myCanvas.width = 1200;
-myCanvas.height = 600;
+	myCanvas.width = 1200;
+	myCanvas.height = 600;
 
-function getDis(px, py, obj){
+function getDis(px, py, obj){										//获取一个点到一个对象边界的距离
 	return (Math.sqrt((px - obj.positionX) *(px - obj.positionX) + (py - obj.positionY) * (py - obj.positionY)) - obj.positionRadius);
 }
 
@@ -142,10 +166,39 @@ function checkSort(a, b){															//比较函数，是Y从小到大的排�
 	}
 	else return -1;	
 }
-function gameOver(kind){															//游戏结束的响应，kind为失败方
-	alert('gameOver');
+function gameOver(kind){	//游戏结束的响应，kind为失败方
+	clearInterval(MyInterval);
+	gameover_frame = 0;
+	gameover_kind = kind;
+	var temp = setInterval("draw_gameOver()",50)	;												
+	//alert('gameOver');
+	document.getElementById("replaybutton").style.display = "block";
+	initial();
+	document.getElementById("replaybutton").style.display = "none";
+	clearInterval(temp);
+
 }
-var soldierClass ={								//小兵的对象
+function draw_gameOver(){
+	
+	if(gameover_frame <= 60){
+		cxtCopy.fillStyle="#0000ff";
+		//cxtCopy.clearRect(0,0,1200,600);
+		cxtCopy.fillRect(0,0,10*gameover_frame,600);
+		cxtCopy.fillRect(1200 - 10*gameover_frame,0,10*gameover_frame,600);
+		gameover_frame++;
+	}
+	else{
+		cxtCopy.fillStyle= "rgb(255,10,67)";
+		cxtCopy.font="60px Arial";
+		if (gameover_kind == 1)
+			cxtCopy.fillText("YOU WIN!",600 - 140,300);
+		else
+			cxtCopy.fillText("YOU Lose!",600 - 140,300);
+	}
+	
+
+}
+var soldierClass ={											//小兵的对象
 	createNew : function(px, py, direct){					//构造函数
 		var soldierRet = {};
 		soldierRet.idType = 'Soldier';
@@ -162,13 +215,14 @@ var soldierClass ={								//小兵的对象
 		soldierRet.speed = soldierSpeed;
 		soldierRet.attack = soldierAttack;
 		soldierRet.attackRadius = soldierAttackRadius;
-		soldierRet.target = null;
+		soldierRet.target = null;														//当前攻击的目标
 		soldierRet.attackInterval = Math.round(soldierAttackInterval / frameTime);
 		soldierRet.attackWait = 0;
 		soldierRet.allHp = soldierAllHp;
 		soldierRet.nowHp = soldierRet.allHp;
 		soldierRet.action = {kind:direct + 3, frame:0};																					//初始为移动状态
-		soldierRet.makeExp = soldierMakeExp;
+		soldierRet.makeExp = soldierMakeExp;																							//杀死小兵可以获取的经验值
+		soldierRet.makeHp =  soldierMakeHp;																								//最后一刀可以获得的血量
 		soldierRet.perform = function(kind){																							//每回合执行的操作函数
 			if (soldierRet.attackWait > 0)																								//CD时间减少
 				soldierRet.attackWait--;
@@ -176,13 +230,13 @@ var soldierClass ={								//小兵的对象
 			if (soldierRet.nowHp <= 0)																									//死亡士兵不执行
 				return;
 			if ((soldierRet.action.kind === 7 || soldierRet.action.kind === 8) && soldierRet.action.frame === 0){						//攻击动作完成
-				soldierRet.target.attacked(soldierRet.attack);																			//在攻击动作完成时造成伤害
+				soldierRet.target.attacked(soldierRet.attack, soldierRet);																			//在攻击动作完成时造成伤害
 				soldierRet.action.kind = soldierRet.action.kind - 4;																	//转为行走状态
 				soldierRet.action.frame = 0;
 				soldierRet.target = null;
 			}
 			var minDis = 100000000, minObj;
-			for (var i = 0; i < Soldiers[1 - kind].length; i++){																						//以下为获取距当前对象最近的敌对对象
+			for (var i = 0; i < Soldiers[1 - kind].length; i++){																		//以下为获取距当前对象最近的敌对对象
 				var p = getDis(soldierRet.positionX, soldierRet.positionY, Soldiers[1 - kind][i]);
 				if (p < minDis && Soldiers[1 - kind][i].nowHp > 0){
 					minDis = p;
@@ -213,19 +267,19 @@ var soldierClass ={								//小兵的对象
 					soldierRet.attackWait = soldierRet.attackInterval;
 					soldierRet.target = minObj;
 					soldierRet.action.frame = 0;
-					if (minObj.positionX < soldierRet.positionX)																//判断攻击朝向
+					if (minObj.positionX < soldierRet.positionX)																	//判断攻击朝向
 						soldierRet.action.kind = 7;
 					else soldierRet.action.kind = 8;
 				}
-				else {																											//原地站立，等待攻击CD
+				else {																												//原地站立，等待攻击CD
 					if (minObj.positionX < soldierRet.positionX)
 						soldierRet.action.kind = 13;
 					else soldierRet.action.kind = 14;
 					soldierRet.action.frame = 0;
 				}
 			}
-			else if (soldierRet.action.kind != 8 && soldierRet.action.kind != 7){																	//当目标状态在范围以外，且当前为非攻击状态，执行移动操作
-				if (soldierRet.action.kind === 14 || soldierRet.action.kind === 13)																	//站立状态转为移动状态
+			else if (soldierRet.action.kind != 8 && soldierRet.action.kind != 7){													//当目标状态在范围以外，且当前为非攻击状态，执行移动操作
+				if (soldierRet.action.kind === 14 || soldierRet.action.kind === 13)													//站立状态转为移动状态
 					soldierRet.action.frame = 0;
 				if (minObj.positionX < soldierRet.positionX)
 					soldierRet.action.kind = 3;
@@ -236,12 +290,27 @@ var soldierClass ={								//小兵的对象
 			}
 		}
 		soldierRet.attacked = function(attackNum, obj){
+			if (soldierRet.nowHp <= 0)
+				return;
 			soldierRet.nowHp -= attackNum;
+			if (soldierRet.nowHp <= 0){																					//当小兵死亡时，给周围英雄加经验
+				obj.nowHp += soldierRet.makeHp;
+				if (obj.idType == 'Hero')
+					obj.killSoldiers++;
+				if (obj.nowHp > obj.allHp)
+					obj.allHp = obj.nowHp;
+				for (var i = 0; i < Heroes[1 - soldierRet.kind].length; i++){
+					var p = getDis(soldierRet.positionX, soldierRet.positionY, Heroes[1 - soldierRet.kind][i]);
+					if (p < getExpRadius){
+						Heroes[1 - soldierRet.kind][i].exp += soldierRet.makeExp;
+					}
+				}
+			}
 		}
 		return soldierRet;
 	}
 };
-function checkHeroAttackKind(kind){
+function checkHeroAttackKind(kind){																						//判断当前英雄行动的类型
 	if (kind === 1 || kind === 2)
 		return - 2;
 	else if (kind === 5 || kind === 6)
@@ -255,7 +324,7 @@ function checkHeroAttackKind(kind){
 	else if (kind === 23 || kind === 24)
 		return 3;
 }
-function getBuff(str, buff){
+function getBuff(str, buff){																							//获取str属性的buff加成总和
 	var s = 0;
 	for (var i = 0; i < buff.length; i++)
 		if (str in buff[i])
@@ -263,7 +332,7 @@ function getBuff(str, buff){
 	return s;
 }
 
-function checkHit(x1,y1,x2,y2,l,a,b,r){
+function checkHit(x1,y1,x2,y2,l,a,b,r){																					//判断一条粗线段和一个圆是否相交
 	var dic;
 	r += 5;
 	var temporary_r1,temporary_r2;
@@ -292,10 +361,11 @@ function checkHit(x1,y1,x2,y2,l,a,b,r){
 		return false;//激光未打中;
 }
 
-var heroClass ={									//玩家控制英雄的对象
-	createNew : function(px, py, kindHero){
+var heroClass ={															//玩家控制英雄的对象
+	createNew : function(px, py, kindHero, name){
 		var heroRet = {};
 		heroRet.idType = 'Hero';
+		heroRet.name = name;
 		heroRet.kind = kindHero;
 		heroRet.positionX = px;												//以下一个英雄的大致方位布局
 		heroRet.positionY = py;
@@ -306,18 +376,22 @@ var heroClass ={									//玩家控制英雄的对象
 		heroRet.right = 43 * 0.7;
 		heroRet.top = 160 * 0.7 + 28;
 		heroRet.bottom = 0;
-		heroRet.speed = 20;														//移动速度
+		heroRet.speed = speedLevel[0];														//移动速度
 		heroRet.exp = 0;														//英雄的经验
-		heroRet.level = 1;														//英雄的等级
+		heroRet.level = 0;														//英雄的等级
+		heroRet.makeExp = heroMakeExp;
+		heroRet.makeHp = heroMakeHp;
 		heroRet.nowAction = 0;
-		heroRet.skills = [{attack : 60, attackRadius : 45, attackInterval : Math.round(1000 / frameTime), attackWait : 0},
-					   {attackRate:1, speedRate:1, attackInterval : Math.round(8000 / frameTime), buffLast:Math.round(4000 / frameTime), attackWait:0},
-					   {attackRate:0.4, attack:0, attackInterval:Math.round(10000 / frameTime), attackWait:0, attackRadius:110},
-					   {attackRate:4,attck:0, attackInterval:Math.round(3000 / frameTime), attackWait:0, attackBorder:10, targetX:0, targetY:0, positionX:0, positionY:0, attackSpeed : 100}];
-		heroRet.buff = [];
-		heroRet.allHp = 1000;
+		heroRet.killSoldiers = 0;												//杀兵的数量
+		heroRet.killHeroes = 0;													//杀英雄的数量
+		heroRet.skills = [{attack : attackLevel[0], attackRadius : heroAttackRadius, attackInterval : Math.round(heroAttackInterval / frameTime), attackWait : 0},
+					   {attackRate:skill1AttackLevel[0], speedRate:skill1SpeedLevel[0], attackInterval : Math.round(skill1CDLevel[0] / frameTime), buffLast:Math.round(skill1BuffLevel[0] / frameTime), attackWait:0},
+					   {attackRate:skill2AttackLevel[0], attack:0, attackInterval:Math.round(skill2CDLevel[0] / frameTime), attackWait:0, attackRadius:heroSkill2Radius},
+					   {attackRate:skill3AttackLevel[0],attack:0, attackInterval:Math.round(skill3CDLevel[0] / frameTime), attackWait:0, attackBorder:heroSkill3Border, targetX:0, targetY:0, positionX:0, positionY:0, attackSpeed : heroSkill3Speed}];
+		heroRet.buff = [];														//当前buff
+		heroRet.allHp = HpLevel[0];
 		heroRet.nowHp = heroRet.allHp;
-		heroRet.deathCD = Math.round(10000 / frameTime);
+		heroRet.deathCD = Math.round(deathLevel[0] / frameTime);
 		heroRet.nowDeathCD = -1;
 		heroRet.pastX = 0;														//大招时前一个点的坐标
 		heroRet.pastY = 0;
@@ -325,9 +399,9 @@ var heroClass ={									//玩家控制英雄的对象
 		heroRet.target = null;													//当前正在攻击的对象
 		heroRet.positionObj = null;												//当前正在追逐的对象(右键点击)只能为敌对对象
 		heroRet.positionTo = null;												//当前正在追逐的点(右键点击)
-		heroRet.perform = function(kind){						//玩家控制英雄的行为
+		heroRet.perform = function(kind, kind0){										//玩家控制英雄的行为
 			heroRet.action.frame = (heroRet.action.frame + 1) % actionFlash[heroRet.action.kind].len;						//画面播放帧数增加
-			for (var i = 0; i < heroRet.buff.length; i++){
+			for (var i = 0; i < heroRet.buff.length; i++){																	//buff的持续时间减少
 				heroRet.buff[i].buffLast--;
 				if (heroRet.buff[i].buffLast === 0){
 					heroRet.buff.splice(i, 1);
@@ -342,7 +416,7 @@ var heroClass ={									//玩家控制英雄的对象
 				return;
 			
 			if (checkHeroAttackKind(heroRet.action.kind) >= 0 && heroRet.action.frame === 0){					//英雄一次攻击结束，转为静止状态
-				if (checkHeroAttackKind(heroRet.action.kind) == 2){
+				if (checkHeroAttackKind(heroRet.action.kind) == 2){												//技能二造成范围伤害
 					for (var i = 0; i < Soldiers[1 - heroRet.kind].length; i++){
 						var p = getDis(heroRet.positionX, heroRet.positionY, Soldiers[1 - heroRet.kind][i]);
 						if (p <= heroRet.skills[2].attackRadius){
@@ -365,19 +439,19 @@ var heroClass ={									//玩家控制英雄的对象
 				heroRet.action.kind = 12 - heroRet.action.kind % 2;
 				heroRet.action.frame = 0;
 			}
-			if (kind == 1){
+			if (kind == 1 || kind0 != 0){																				//非玩家控制英雄获取AI操作
 				heroRet.getAI(kind);
 			}
 			if (heroRet.positionObj != null && heroRet.positionObj.nowHp <= 0)
 				heroRet.positionObj = null;
 			if (checkHeroAttackKind(heroRet.action.kind) < 0){														//当前为非进攻状态时
-				if (heroRet.nowAction == 1 && heroRet.skills[1].attackWait == 0){
+				if (heroRet.nowAction == 1 && heroRet.skills[1].attackWait == 0){									//如有技能1的指令且无CD则执行，增加buff
 					fighter_q.play();
 					heroRet.buff.push({attack:heroRet.skills[0].attack * heroRet.skills[1].attackRate, speed:heroRet.speed * heroRet.skills[1].speedRate, buffLast:heroRet.skills[1].buffLast});
 					heroRet.skills[1].attackWait = heroRet.skills[1].attackInterval;
 					heroRet.nowAction = 0;
 				}
-				else if (heroRet.nowAction == 2 && heroRet.skills[2].attackWait == 0){
+				else if (heroRet.nowAction == 2 && heroRet.skills[2].attackWait == 0){								//如有技能2的指令且无CD则执行
 					fighter_w.play();
 					heroRet.action.kind = 21;
 					heroRet.action.frame = 0;
@@ -385,7 +459,7 @@ var heroClass ={									//玩家控制英雄的对象
 					heroRet.skills[2].attack = heroRet.skills[0].attack * (1 + heroRet.skills[2].attackRate);
 					heroRet.nowAction = 0;
 				}
-				else if (heroRet.nowAction == 3 && heroRet.skills[3].attackWait == 0){
+				else if (heroRet.nowAction == 3 && heroRet.skills[3].attackWait == 0){								//如有技能3的指令且无CD则执行
 					fighter_e.play();
 					if (nowMouseX < heroRet.positionX)
 						heroRet.action.kind = 23;
@@ -401,7 +475,7 @@ var heroClass ={									//玩家控制英雄的对象
 					heroRet.skills[3].positionY = py;
 					if (px == nowMouseX && py == nowMouseY)
 						nowMouseX++;
-					var p = 10000 , q = 10000;
+					var p = 10000 , q = 10000;																		//调整目标点的位置
 					if (nowMouseX != px)
 						p =  Math.abs(3600 / (nowMouseX - px));
 					if (nowMouseY != heroRet.positionY)
@@ -415,9 +489,9 @@ var heroClass ={									//玩家控制英雄的对象
 				else if (heroRet.positionObj != null){																			//当前有追逐对象时
 					var temObj = heroRet.positionObj;
 					var p = getDis(heroRet.positionX, heroRet.positionY, temObj);
-					if (p < heroRet.skills[0].attackRadius + 1){																		//在攻击范围内则攻击
+					if (p < heroRet.skills[0].attackRadius + 1){																//在攻击范围内则攻击
 						if (heroRet.skills[0].attackWait === 0){
-							fighter_a.play();																	//无CD时间时开始攻击
+							fighter_a.play();																					//无CD时间时开始攻击
 							heroRet.skills[0].attackWait = heroRet.skills[0].attackInterval;
 							heroRet.target = temObj;
 							heroRet.action.frame = 0;
@@ -467,7 +541,7 @@ var heroClass ={									//玩家控制英雄的对象
 					heroRet.action.frame = 0;
 				}
 			}
-			else if (checkHeroAttackKind(heroRet.action.kind) == 3 && heroRet.action.frame >= 2){
+			else if (checkHeroAttackKind(heroRet.action.kind) == 3 && heroRet.action.frame >= 2){							//当为技能3的攻击状态时，则继续发射光线
 					var pObj = getMove(heroRet.skills[3].positionX, heroRet.skills[3].positionY, heroRet.skills[3].targetX, heroRet.skills[3].targetY, heroRet.skills[3].attackSpeed);
 					if (pObj.positionX < 0){
 						pObj.positionY -= (pObj.positionY - heroRet.skills[3].positionY) * pObj.positionX / (pObj.positionX - heroRet.skills[3].positionX);
@@ -563,7 +637,22 @@ var heroClass ={									//玩家控制英雄的对象
 			
 		}
 		heroRet.attacked = function(attackNum, obj){							//收到伤害
+			if (heroRet.nowHp <= 0)
+				return;
 			heroRet.nowHp -= attackNum;
+			if (heroRet.nowHp <= 0){																					//当英雄死亡时，给周围英雄加经验
+				obj.nowHp += heroRet.makeHp;
+				if (obj.idType == 'Hero')
+					obj.killHeroes++;
+				if (obj.nowHp > obj.allHp)
+					obj.allHp = obj.nowHp;
+				for (var i = 0; i < Heroes[1 - heroRet.kind].length; i++){
+					var p = getDis(heroRet.positionX, heroRet.positionY, Heroes[1 - heroRet.kind][i]);
+					if (p < getExpRadius){
+						Heroes[1 - heroRet.kind][i].exp += heroRet.makeExp;
+					}
+				}
+			}
 		}
 		return heroRet;
 	}
@@ -575,7 +664,7 @@ var towerClass ={									//塔的对象
 	createNew : function(px, py, qx, qy,pleft,pright,ptop,pbuttom,pradius,picx,picy, id, kindType){
 		var towerRet = {};
 		towerRet.idType = id;
-		this.kind = kindType;
+		towerRet.kind = kindType;
 		towerRet.picX = picx;												//以下为塔的位置参数
 		towerRet.picY = picy;
 		towerRet.positionX = px;
@@ -590,9 +679,10 @@ var towerClass ={									//塔的对象
 		towerRet.allHp = towerAllHp;
 		towerRet.nowHp = towerRet.allHp;
 		towerRet.attackRadius = towerAttackRadius;
-		towerRet.attack = towerAttack;												//攻击为持续攻击
+		towerRet.attack = towerAttack;										//攻击为持续攻击
 		towerRet.target = null;												//攻击对象
-		towerRet.makeExp = 500;												//提供经验
+		towerRet.makeExp = towerMakeExp;									//提供经验
+		towerRet.makeBlood = towerMakeHp;
 		towerRet.perform = function(kind){
 			if (towerRet.nowHp <= 0)											//塔被毁坏时返回
 				return;
@@ -629,7 +719,20 @@ var towerClass ={									//塔的对象
 			}
 		}
 		towerRet.attacked = function(attackNum, obj){
+			if (towerRet.nowHp <= 0)
+				return;
 			towerRet.nowHp -= attackNum;
+			if (towerRet.nowHp <= 0){																					//当英雄死亡时，给周围英雄加经验
+				obj.nowHp += towerRet.makeHp;
+				if (obj.nowHp > obj.allHp)
+					obj.allHp = obj.nowHp;
+				for (var i = 0; i < Heroes[1 - towerRet.kind].length; i++){
+					var p = getDis(towerRet.positionX, towerRet.positionY, Heroes[1 - towerRet.kind][i]);
+					if (p < getExpRadius){
+						Heroes[1 - towerRet.kind][i].exp += towerRet.makeExp;
+					}
+				}
+			}
 		}
 		return towerRet;
 	}
@@ -663,9 +766,11 @@ var campClass ={															//大本营的对象
 				campRet.nowNum = 0;
 		}
 		campRet.attacked = function(attackNum, obj){
+			if (Towers[campRet.kind].length > 0)
+				return;
 			campRet.nowHp -= attackNum;
 			if (campRet.nowHp <= 0){								//大本营没血时游戏结束
-				gameOver(this.kind);
+				gameOver(campRet.kind);
 			}
 		}
 		return campRet;
@@ -690,7 +795,7 @@ window.onmousemove = function(e) {
 		screenMoveflag = 2;
 	else screenMoveflag = 0;
 }
-window.onkeydown = function(e){
+window.onkeydown = function(e){																	//键盘事件响应,'q','w','e'放技能，‘space’返回到英雄位置
 	if (e.keyCode == 81){
 		Heroes[0][0].nowAction = 1;
 	}
@@ -744,9 +849,9 @@ function initial(){																			//初始化过程
 	Towers[1].push(towerClass.createNew(3146.18,295.68,3137.18,186.68,35,35,118.5,11,37,74,141, 'towerSmall', 1));
 	Towers[1].push(towerClass.createNew(3146.18,532.18,3142.18,421.18,35,35,118.5,11,37,74,141, 'towerSmall', 1));
 	Towers[1].push(towerClass.createNew(2226,413,2221,268,47,47,157.5,21,53.5,75,161, 'towerBig', 1));
-	Heroes[0].push(heroClass.createNew(100, 400, 0));																	//加入英雄
-	Heroes[1].push(heroClass.createNew(3500, 400, 1));																	//加入英雄
-	setInterval(cycleOperation, frameTime);					//计时函数
+	Heroes[0].push(heroClass.createNew(100, 400, 0, 'Player'));																	//加入英雄
+	Heroes[1].push(heroClass.createNew(3500, 400, 1, 'Computer'));																	//加入英雄
+	MyInterval = setInterval(cycleOperation, frameTime);					//计时函数
 
 }
 function cycleOperation(){										//定时执行
@@ -760,7 +865,7 @@ function cycleOperation(){										//定时执行
 		}
 	for (var k = 0; k < 2; k++)										//两方英雄行动
 		for (var i = 0; i < Heroes[k].length; i++){
-			Heroes[k][i].perform(k);
+			Heroes[k][i].perform(k, i);
 		}
 	for (var k = 0; k < 2; k++)										//大本营行动
 		baseCamp[k].perform(k);
@@ -773,10 +878,33 @@ function cycleOperation(){										//定时执行
 	if (allPicLeft > 3600 - cxt.canvas.width)
 		allPicLeft = 3600 - cxt.canvas.width;
 	checkDead();													//判断对象死亡
-	checkMargin();													//调整移动非法
-	paintOn();
+	checkMargin();													//调整非法移动
+	checkAddLevel();												//判断等级增加
+	paintOn();														//绘制图形
 }
-function checkDead(){													//判断游戏死亡
+function checkAddLevel(){
+	for (var k = 0; k < 2; k++)
+		for (var i = 0; i < Heroes[k].length; i++)
+			if (Heroes[k][i].level < levelMax - 1 && Heroes[k][i].exp >= expLevel[Heroes[k][i].level]){
+				Heroes[k][i].level++;
+				var l = Heroes[k][i].level;
+				Heroes[k][i].speed = speedLevel[l];
+				Heroes[k][i].allHp = HpLevel[l];
+				Heroes[k][i].nowHp += HpLevel[l] - HpLevel[l - 1];
+				Heroes[k][i].deathCD = Math.round(deathLevel[l] / frameTime);
+				Heroes[k][i].skills[0].attack = attackLevel[l];
+				Heroes[k][i].skills[1].attackRate = skill1AttackLevel[l];
+				Heroes[k][i].skills[1].speedRate = skill1SpeedLevel[l];
+				Heroes[k][i].skills[1].attackInterval = Math.round(skill1CDLevel[l] / frameTime);
+				Heroes[k][i].skills[1].buffLast = Math.round(skill1BuffLevel[l] / frameTime);
+				Heroes[k][i].skills[2].attackRate = skill2AttackLevel[l];
+				Heroes[k][i].skills[2].attackInterval = Math.round(skill2CDLevel[l] / frameTime);
+				Heroes[k][i].skills[3].attackRate = skill3AttackLevel[l];
+				Heroes[k][i].skills[3].attackInterval = Math.round(skill3CDLevel[l] / frameTime);
+			}
+		
+}
+function checkDead(){													//判断对象死亡
 	for (var k = 0; k < 2; k++)
 		for (var i = 0; i < Soldiers[k].length; i++){
 			if (Soldiers[k][i].nowHp <= 0){
@@ -784,13 +912,13 @@ function checkDead(){													//判断游戏死亡
 					Soldiers[k][i].action.kind = 17 + Soldiers[k][i].action.kind % 2;
 					Soldiers[k][i].action.frame = 0;
 				}
-				else if (Soldiers[k][i].action.frame === 0){
+				else if (Soldiers[k][i].action.frame === 0){			//完成死亡动画后删去对象
 					Soldiers[k].splice(i, 1);
 					i--;
 				}
 			}
 		}
-	for (var k = 0; k < 2; k++)
+	for (var k = 0; k < 2; k++)											//塔毁灭后删去，加入到被删去的塔中
 		for (var i = 0; i < Towers[k].length; i++){
 			if (Towers[k][i].nowHp <= 0){
 				destroyedTowers[k].push(Towers[k][i]);
@@ -798,22 +926,22 @@ function checkDead(){													//判断游戏死亡
 				i--;
 			}
 		}
-	for (var k = 0; k < 2; k++)
+	for (var k = 0; k < 2; k++)											//英雄死亡
 		for (var i = 0; i < Heroes[k].length; i++){
-			if (Heroes[k][i].nowHp <= 0){
+			if (Heroes[k][i].nowHp <= 0){								//开始播放死亡效果
 				if (Heroes[k][i].action.kind != 15 && Heroes[k][i].action.kind != 16 && Heroes[k][i].nowDeathCD < 0){
 					Heroes[k][i].action.kind = 15 + Heroes[k][i].action.kind % 2;
 					Heroes[k][i].action.frame = 0;
 					Heroes[k][i].nowDeathCD = Heroes[k][i].deathCD;
 				}
-				else if (Heroes[k][i].nowDeathCD >= 0){
+				else if (Heroes[k][i].nowDeathCD >= 0){	
 					Heroes[k][i].nowDeathCD--;
-					if (Heroes[k][i].nowDeathCD < 0){
+					if (Heroes[k][i].nowDeathCD < 0){						//复活
 						Heroes[k][i].nowHp = Heroes[k][i].allHp;
 						Heroes[k][i].action.kind = 12 - k;
 						Heroes[k][i].action.frame = 0;
 					}
-					if ((Heroes[k][i].action.kind === 15 || Heroes[k][i].action.kind === 16)&& Heroes[k][i].action.frame == 0){
+					if ((Heroes[k][i].action.kind === 15 || Heroes[k][i].action.kind === 16)&& Heroes[k][i].action.frame == 0){		//死亡动画结束时回到泉水
 						Heroes[k][i].positionObj = null;
 						Heroes[k][i].positionTo = null;
 						Heroes[k][i].positionY = 400;
@@ -821,18 +949,20 @@ function checkDead(){													//判断游戏死亡
 							Heroes[k][i].positionX = 150;
 						else
 							Heroes[k][i].positionX = 3450;
+						if (k == 0 && i == 0)
+							allPicLeft = 0;
 						Heroes[k][i].action.kind = 12 - k;
 					}
 				}
 			}
-			else if ((k == 0 && Heroes[k][i].positionX <= addBloodRadius)||(k == 1 && Heroes[k][i].positionX >= 3600 - addBloodRadius)){
+			else if ((k == 0 && Heroes[k][i].positionX <= addBloodRadius)||(k == 1 && Heroes[k][i].positionX >= 3600 - addBloodRadius)){		//在泉水内回血
 				Heroes[k][i].nowHp = Math.round(Heroes[k][i].nowHp + Heroes[k][i].allHp * addBloodRate);
 				if (Heroes[k][i].nowHp > Heroes[k][i].allHp)
 					Heroes[k][i].nowHp = Heroes[k][i].allHp;
 			}
 		}
 }
-function adjustPosition(obj){
+function adjustPosition(obj){											//调整位置
 	if (obj.positionX < 0)
 		obj.positionX = 0;
 	if (obj.positionY < 229)
@@ -852,7 +982,7 @@ function adjustPosition(obj){
 			}
 		}
 }
-function checkMargin(){													//判断
+function checkMargin(){													//判断边缘，用于小兵、英雄与塔之间
 	for (var k = 0; k < 2; k++)
 		for (var i = 0; i < Soldiers[k].length; i++){
 			adjustPosition(Soldiers[k][i]);
@@ -863,7 +993,7 @@ function checkMargin(){													//判断
 		}
 }
 
-function drawTowerAttack(drawObj){
+function drawTowerAttack(drawObj){										//防御塔的攻击效果
 	cxt.beginPath();
 	var grd=cxt.createRadialGradient(75,50,5,90,60,100);
 	grd.addColorStop(0,"red");
@@ -881,7 +1011,7 @@ function drawTowerAttack(drawObj){
 }
 
 
-function drawNowHp(drawObj){//推荐英雄血量在700-2000之间
+function drawNowHp(drawObj){//推荐英雄血量在700-2000之间			每种对象的血量
 	var bloodheight = 5;
 	var headtoblood = 10;
 	var bloodhalfwidth = drawObj.left + 16;
@@ -891,7 +1021,11 @@ function drawNowHp(drawObj){//推荐英雄血量在700-2000之间
 		cxt.fillStyle = 'rgb(69,79,81)';
 		cxt.fillRect(drawObj.positionX - bloodhalfwidth - allPicLeft, drawObj.positionY  - drawObj.top - bloodheight - headtoblood, 2 * bloodhalfwidth, bloodheight);//allHp
 		var rate = drawObj.nowHp / drawObj.allHp;
-		cxt.fillStyle = 'rgb(26,184,63)';
+
+		if(drawObj.kind === 0)
+			cxt.fillStyle = 'rgb(26,184,63)';
+		else if(drawObj.kind === 1)
+			cxt.fillStyle = 'rgb(255,10,67)';
 		var hundrednum = Math.round(drawObj.nowHp / 100);
 		var nowHpWidth = (2 * bloodhalfwidth) * rate;
 		cxt.fillRect(drawObj.positionX - bloodhalfwidth - allPicLeft, drawObj.positionY  - drawObj.top - bloodheight - headtoblood, nowHpWidth, bloodheight);//nowHp
@@ -907,13 +1041,24 @@ function drawNowHp(drawObj){//推荐英雄血量在700-2000之间
 			//cxt.lineTo(0,0);
 		}
 		cxt.stroke();
+		cxt.font="20px Arial";
+		cxt.fillText('Lv. ' + drawObj.level + " " + drawObj.name,drawObj.positionX - bloodhalfwidth - allPicLeft  + 5,drawObj.positionY  - drawObj.top - bloodheight - headtoblood - 5);
+
 	}
 	else
 	{
 	cxt.fillStyle = 'rgb(69,79,81)';
 	cxt.fillRect(drawObj.positionX - drawObj.left - allPicLeft, drawObj.positionY  - drawObj.top - bloodheight - headtoblood, drawObj.left + drawObj.right, bloodheight);//allHp
 	var rate = drawObj.nowHp / drawObj.allHp;
+	if(drawObj.nowHp < 0)
+	{
+		rate = 0;
+	}
 	cxt.fillStyle = 'rgb(26,184,63)';
+	if(drawObj.kind === 0)
+			cxt.fillStyle = 'rgb(26,184,63)';
+		else if(drawObj.kind === 1)
+			cxt.fillStyle = 'rgb(255,10,67)';
 	cxt.fillRect(drawObj.positionX - drawObj.left - allPicLeft, drawObj.positionY  - drawObj.top - 15, (drawObj.left + drawObj.right) * rate, 5);//nowHp
 	}
 	
@@ -934,14 +1079,14 @@ function paintOn()													//将所有图画到canvas上
 	for (var k = 0; k < 2; k++)
 		for (var i = 0; i < Heroes[k].length; i++)
 			allObject.push(Heroes[k][i]);
-	allObject.sort(checkSort);
+	allObject.sort(checkSort);										//所有对象按Y坐标排序，用于处理图像的层叠效果
 	var img1 = allImg[allImg.length - 3];
 	cxt.drawImage(img1, 0 - allPicLeft, 0);
-	for (var k = 0; k < 2; k++)
+	for (var k = 0; k < 2; k++)										//绘制塔的攻击效果
 		for (var i = 0; i < Towers[k].length; i++)
 			if (Towers[k][i].target != null)
 				drawTowerAttack(Towers[k][i]);
-	drawNowHp(baseCamp[0]);
+	drawNowHp(baseCamp[0]);											//绘制大本营血量
 	drawNowHp(baseCamp[1]);
 	for (var i = 0; i < allObject.length; i++){
 		var img;
@@ -952,17 +1097,17 @@ function paintOn()													//将所有图画到canvas上
 		else if (allObject[i].idType == 'Hero'){
 			img= actionFlash[allObject[i].action.kind].src[0][allObject[i].action.frame];
 			if (checkHeroAttackKind(allObject[i].action.kind) == 0){
-				if (allObject[i].buff.length > 0){
+				if (allObject[i].buff.length > 0){								//有buff时展现不同的攻击效果
 					img= actionFlash[allObject[i].action.kind + 14].src[0][allObject[i].action.frame];
 					if (allObject[i].action.frame == actionFlash[allObject[i].action.kind + 14].len - 1)
 						allObject[i].buff.splice(0, 1);
 				}
 			}
-			else if (checkHeroAttackKind(allObject[i].action.kind) == 2){
+			else if (checkHeroAttackKind(allObject[i].action.kind) == 2){		//技能二绘制叠加效果图
 				var img1 = actionFlash[22].src[0][allObject[i].action.frame];
 				cxt.drawImage(img1, allObject[i].positionX - 289 - allPicLeft, allObject[i].positionY - 416);
 			}
-			else if (checkHeroAttackKind(allObject[i].action.kind) == 3 && allObject[i].action.frame >= 2){
+			else if (checkHeroAttackKind(allObject[i].action.kind) == 3 && allObject[i].action.frame >= 2){		//技能三绘制光线
 				var px = allObject[i].positionX, py = allObject[i].positionY - 111;
 				if (allObject[i].action.kind % 2 == 1)
 					px -= 16;
@@ -993,7 +1138,7 @@ function paintOn()													//将所有图画到canvas上
 			else
 				img = allImg[allImg.length - 1];
 		}
-		if (allObject[i].nowHp > 0)
+		if (allObject[i].nowHp > 0)						//绘制血量条
 			drawNowHp(allObject[i]);
 		cxt.drawImage(img, allObject[i].positionX - allObject[i].picX - allPicLeft, allObject[i].positionY - allObject[i].picY);
 		cxt.strokeStyle="#0000ff";
