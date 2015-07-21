@@ -896,7 +896,7 @@ function drawNowHp(drawObj){//推荐英雄血量在700-2000之间
 		var nowHpWidth = (2 * bloodhalfwidth) * rate;
 		cxt.fillRect(drawObj.positionX - bloodhalfwidth - allPicLeft, drawObj.positionY  - drawObj.top - bloodheight - headtoblood, nowHpWidth, bloodheight);//nowHp
 		cxt.fillStyle = 'rgb(2,64,85)';
-		cxt.strokeStyle = 'rgb(245,250,42)';
+		cxt.strokeStyle = 'rgb(245,251,42)';
 		cxt.beginPath();
 		// cxt.moveTo(drawObj.positionX - allPicLeft, drawObj.positionY);
 		// cxt.lineTo(drawObj.positionX - allPicLeft, drawObj.positionY - drawObj.top);
