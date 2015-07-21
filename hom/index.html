@@ -20,7 +20,8 @@
 var actionFlash = [{len:0,kind:0},{len:6,kind:1},{len:6,kind:1},{len:6,kind:2},{len:6,kind:2},
 				   {len:6,kind:1},{len:6,kind:1},{len:4,kind:2},{len:4,kind:2},{len:0,kind:0},
 				   {len:0,kind:0},{len:1,kind:1},{len:1,kind:1},{len:1,kind:2},{len:1,kind:2},
-				   {len:6,kind:1},{len:6,kind:1},{len:4,kind:2},{len:4,kind:2}];
+				   {len:6,kind:1},{len:6,kind:1},{len:4,kind:2},{len:4,kind:2},{len:6,kind:1},
+				   {len:6,kind:1},{len:10,kind:1},{len:10,kind:1},{len:10,kind:1},{len:10,kind:1}];
 var allPicSrc= [];
 	for (var i = 0; i < 6; i++)
 		allPicSrc.push('images/fighter/fighter_run_l/' + 'Frame' + i + '.png');
@@ -70,6 +71,18 @@ var allPicSrc= [];
 		allPicSrc.push('images/xiaobing/xiaobing_die_r/blue/' + 'Frame' + i + '.png');
 	for (var i = 0; i < 4; i++)
 		allPicSrc.push('images/xiaobing/xiaobing_die_r/red/' + 'Frame' + i + '.png');
+	for (var i = 0; i < 6; i++)
+		allPicSrc.push('images/fighter/fighter_skill01_l/' + 'Frame' + i + '.png');
+	for (var i = 0; i < 6; i++)
+		allPicSrc.push('images/fighter/fighter_skill01_r/' + 'Frame' + i + '.png');
+	for (var i = 0; i < 10; i++)
+		allPicSrc.push('images/fighter/fighter_skill02/' + 'Frame' + i + '.png');
+	for (var i = 0; i < 10; i++)
+		allPicSrc.push('images/fighter/fighter_skill02_add/' + 'Frame' + i + '.png');
+	for (var i = 0; i < 10; i++)
+		allPicSrc.push('images/fighter/fighter_skill03_l/' + 'Frame' + i + '.png');
+	for (var i = 0; i < 10; i++)
+		allPicSrc.push('images/fighter/fighter_skill03_r/' + 'Frame' + i + '.png');
 	allPicSrc.push('images/mappic/home.png');
 	allPicSrc.push('images/mappic/tower_big.png');
 	allPicSrc.push('images/mappic/tower_home.png');
@@ -81,7 +94,7 @@ var allPicSrc= [];
 		Img.src = allPicSrc[i];
 	}
 	var sum = 0;
-	for (var i = 0; i < 19 ;i++){
+	for (var i = 0; i < actionFlash.length ;i++){
 		actionFlash[i].src = [[],[]];
 			for (var k = 0; k < actionFlash[i].kind; k++){
 				for(var j = 0; j < actionFlash[i].len; j++,sum++)
