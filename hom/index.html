@@ -89,16 +89,17 @@ var allPicSrc= [];
 	allPicSrc.push('images/mappic/background.png');
 	allPicSrc.push('images/mappic/tower_big_destroyed.png');
 	allPicSrc.push('images/mappic/tower_home_destroyed.png');
+	var allImg = [];
 	for (var i = 0; i < allPicSrc.length; i++){
-		var Img = new Image();
-		Img.src = allPicSrc[i];
+		allImg[i] = new Image();
+		allImg[i].src = allPicSrc[i];
 	}
 	var sum = 0;
 	for (var i = 0; i < actionFlash.length ;i++){
 		actionFlash[i].src = [[],[]];
 			for (var k = 0; k < actionFlash[i].kind; k++){
 				for(var j = 0; j < actionFlash[i].len; j++,sum++)
-					actionFlash[i].src[k].push(allPicSrc[sum]);
+					actionFlash[i].src[k].push(allImg[sum]);
 				}
 	}
 	initial();

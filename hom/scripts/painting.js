@@ -264,8 +264,9 @@ function getBuff(str, buff){
 	return s;
 }
 
-function checkHit(x1,x2,y1,y2,l,a,b,r){
+function checkHit(x1,y1,x2,y2,l,a,b,r){
 	var dic;
+	r += 5;
 	var temporary_r1,temporary_r2;
 	var temporary1,temporary2,panduan1,panduan2;
 	temporary1 = (y2 - y1) * a - (x2 - x1) * b + x2 * y1 - x1 * y2;
@@ -312,7 +313,7 @@ var heroClass ={									//玩家控制英雄的对象
 		heroRet.skills = [{attack : 60, attackRadius : 45, attackInterval : Math.round(1000 / frameTime), attackWait : 0},
 					   {attackRate:1, speedRate:1, attackInterval : Math.round(8000 / frameTime), buffLast:Math.round(4000 / frameTime), attackWait:0},
 					   {attackRate:0.4, attack:0, attackInterval:Math.round(10000 / frameTime), attackWait:0, attackRadius:110},
-					   {attackRate:4,attck:0, attackInterval:Math.round(30000 / frameTime), attackWait:0, attackBorder:10, targetX:0, targetY:0, positionX:0, positionY:0, attackSpeed : 100}];
+					   {attackRate:4,attck:0, attackInterval:Math.round(3000 / frameTime), attackWait:0, attackBorder:10, targetX:0, targetY:0, positionX:0, positionY:0, attackSpeed : 100}];
 		heroRet.buff = [];
 		heroRet.allHp = 1000;
 		heroRet.nowHp = heroRet.allHp;
@@ -324,9 +325,9 @@ var heroClass ={									//玩家控制英雄的对象
 		heroRet.target = null;													//当前正在攻击的对象
 		heroRet.positionObj = null;												//当前正在追逐的对象(右键点击)只能为敌对对象
 		heroRet.positionTo = null;												//当前正在追逐的点(右键点击)
-		heroRet.perform = function(){						//玩家控制英雄的行为
+		heroRet.perform = function(kind){						//玩家控制英雄的行为
 			heroRet.action.frame = (heroRet.action.frame + 1) % actionFlash[heroRet.action.kind].len;						//画面播放帧数增加
-			for (var i = 0; i < heroRet.buff.len; i++){
+			for (var i = 0; i < heroRet.buff.length; i++){
 				heroRet.buff[i].buffLast--;
 				if (heroRet.buff[i].buffLast === 0){
 					heroRet.buff.splice(i, 1);
@@ -461,14 +462,22 @@ var heroClass ={									//玩家控制英雄的对象
 			}
 			else if (checkHeroAttackKind(heroRet.action.kind) == 3 && heroRet.action.frame >= 2){
 					var pObj = getMove(heroRet.skills[3].positionX, heroRet.skills[3].positionY, heroRet.skills[3].targetX, heroRet.skills[3].targetY, heroRet.skills[3].attackSpeed);
-					if (pObj.positionX < 0)
+					if (pObj.positionX < 0){
+						pObj.positionY -= (pObj.positionY - heroRet.skills[3].positionY) * pObj.positionX / (pObj.positionX - heroRet.skills[3].positionX);
 						pObj.positionX = 0;
-					if (pObj.positionY < 229)
+					}
+					if (pObj.positionY < 229){
+						pObj.positionX -= (pObj.positionX - heroRet.skills[3].positionX) * (pObj.positionY - 229)/ (pObj.positionY - heroRet.skills[3].positionY);
 						pObj.positionY = 229;
-					if (pObj.positionX > 3600)
+					}
+					if (pObj.positionX > 3600){
+						pObj.positionY -= (pObj.positionY - heroRet.skills[3].positionY) * (pObj.positionX - 3600)/ (pObj.positionX - heroRet.skills[3].positionX);
 						pObj.positionX = 3600;
-					if (pObj.positionY > 600)
+					}
+					if (pObj.positionY > 600){
+						pObj.positionX -= (pObj.positionX - heroRet.skills[3].positionX) * (pObj.positionY - 600)/ (pObj.positionY - heroRet.skills[3].positionY);
 						pObj.positionY = 600;
+					}
 					for (var i = 0; i < Soldiers[1 - heroRet.kind].length; i++){
 						if (checkHit(heroRet.skills[3].positionX, heroRet.skills[3].positionY,pObj.positionX, pObj.positionY, heroRet.skills[3].attackBorder, Soldiers[1-heroRet.kind][i].positionX, Soldiers[1-heroRet.kind][i].positionY, Soldiers[1-heroRet.kind][i].positionRadius)){
 							if (heroRet.action.frame == 1 || 
@@ -487,6 +496,8 @@ var heroClass ={									//玩家控制英雄的对象
 					}
 					heroRet.pastX = heroRet.skills[3].positionX;
 					heroRet.pastY = heroRet.skills[3].positionY;
+					heroRet.skills[3].positionX = pObj.positionX;
+					heroRet.skills[3].positionY = pObj.positionY;
 			}
 		}
 		heroRet.performAI = function(kind){								//电脑AI的行为
@@ -637,7 +648,7 @@ window.onkeydown = function(e){
 		Heroes[0][0].positionObj = null;
 		Heroes[0][0].positionTo = null;
 	}
-	else if (e.keyCode == 8){
+	else if (e.keyCode == 32){
 		allPicLeft = Heroes[0][0].positionX - 600;
 		if (allPicLeft < 0)
 			allPicLeft = 0;
@@ -877,23 +888,22 @@ function paintOn()													//将所有图画到canvas上
 	drawNowHp(baseCamp[0]);
 	drawNowHp(baseCamp[1]);
 	for (var i = 0; i < allObject.length; i++){
-		var img = new Image();
+		var img;
 		if (allObject[i].idType == 'towerBig')
-			img.src = 'images/mappic/tower_big.png';
+			img = allImg[allImg.length - 5];
 		else if (allObject[i].idType == 'towerSmall')
-			img.src = 'images/mappic/tower_home.png';
+			img = allImg[allImg.length - 4];
 		else if (allObject[i].idType == 'Hero'){
-			img.src= actionFlash[allObject[i].action.kind].src[0][allObject[i].action.frame];
+			img= actionFlash[allObject[i].action.kind].src[0][allObject[i].action.frame];
 			if (checkHeroAttackKind(allObject[i].action.kind) == 0){
 				if (allObject[i].buff.length > 0){
-					img.src= actionFlash[allObject[i].action.kind + 14].src[0][allObject[i].action.frame];
+					img= actionFlash[allObject[i].action.kind + 14].src[0][allObject[i].action.frame];
 					if (allObject[i].action.frame == actionFlash[allObject[i].action.kind + 14].len - 1)
 						allObject[i].buff.splice(0, 1);
 				}
 			}
 			else if (checkHeroAttackKind(allObject[i].action.kind) == 2){
-				var img1 = new Image();
-				img1.src = actionFlash[22].src[0][allObject[i].action.frame];
+				var img1 = actionFlash[22].src[0][allObject[i].action.frame];
 				cxt.drawImage(img1, allObject[i].positionX - 289 - allPicLeft, allObject[i].positionY - 416);
 			}
 			else if (checkHeroAttackKind(allObject[i].action.kind) == 3 && allObject[i].action.frame >= 2){
@@ -920,12 +930,12 @@ function paintOn()													//将所有图画到canvas上
 //				alert(12345);
 		}
 		else
-			img.src= actionFlash[allObject[i].action.kind].src[allObject[i].kind][allObject[i].action.frame];
+			img = actionFlash[allObject[i].action.kind].src[allObject[i].kind][allObject[i].action.frame];
 		if ((allObject[i].idType == 'towerBig' || allObject[i].idType == 'towerSmall')&&allObject[i].nowHp <= 0){
 			if (allObject[i].idType == 'towerBig')
-				img.src = 'images/mappic/tower_big_destroyed.png';
+				img = allImg[allImg.length - 2];
 			else
-				img.src = 'images/mappic/tower_home_destroyed.png';
+				img = allImg[allImg.length - 1];
 		}
 		if (allObject[i].nowHp > 0)
 			drawNowHp(allObject[i]);
