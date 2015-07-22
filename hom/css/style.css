@@ -92,7 +92,7 @@ a,img{border:0;}
 }
 #status_bar #status_1 #level_ad
 {
-	width : 200px;
+	width : 220px;
 	height: 100%;
 	padding :0px 10px;
 	float: left;
@@ -112,7 +112,7 @@ a,img{border:0;}
 }
 #status_bar #status_1 #hp_buff
 {
-	width : 200px;
+	width : 240px;
 	height: 100%;
 	float: left;
 	padding :0px 10px;
@@ -213,13 +213,24 @@ a,img{border:0;}
 	height:50%;
 	line-height:30px;
 }
+#tip
+{
+	font-size: 20px;
+	position: absolute;
+	top:0px;
+	color: red;
+	left:0;
+	z-index: 1005;
+	font-family: 微软雅黑;
+	font-weight: bold;
 
+}
 .play
 {
 	font-size: 140px;
 	position: absolute;
 	top:500px;
-	left:0;
+	left:40%;
 	/*margin-left: -90px;*/
 	z-index: 1000;
 }
@@ -245,7 +256,7 @@ a,img{border:0;}
 	font-size: 140px;
 	position: absolute;
 	top:500px;
-	left:0;
+	left:60%;
 	/*margin-left: 90px;*/
 	z-index: 1000;
 }
