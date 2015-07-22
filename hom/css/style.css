@@ -276,7 +276,7 @@ a,img{border:0;}
 
 }
 
-.start{font: Arial, Helvetica, sans-serif, "微软雅黑";overflow:hidden; display:block; }
+.start{font: Arial, Helvetica, sans-serif, "微软雅黑";overflow:hidden; display:none;}
 .beijinggushi
 {
 	cursor:crosshair;margin:0; padding:0; position:absolute; overflow:hidden; background:#000; left:0; top:0; width:100%; height:100%;
