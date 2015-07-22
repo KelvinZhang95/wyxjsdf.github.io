@@ -67,14 +67,14 @@ a,img{border:0;}
 {
 	height: 100%;
 	float: left;
-
 }
 #status_bar #status_1 #name
 {
+	width : 120px;
 	height: 100%;
-
+	padding :0px 10px;
 	float: left;
-
+	box-shadow: 3px 3px 3px #666;
 }
 #status_bar #status_1 #name #hero
 {
@@ -92,8 +92,11 @@ a,img{border:0;}
 }
 #status_bar #status_1 #level_ad
 {
+	width : 200px;
 	height: 100%;
+	padding :0px 10px;
 	float: left;
+	box-shadow: 3px 3px 3px #666;
 }
 #status_bar #status_1 #level_ad #level
 {
@@ -109,9 +112,11 @@ a,img{border:0;}
 }
 #status_bar #status_1 #hp_buff
 {
+	width : 200px;
 	height: 100%;
 	float: left;
-	
+	padding :0px 10px;
+	box-shadow: 3px 3px 3px #666;
 }
 #status_bar #status_1 #hp_buff #hp
 {
@@ -127,78 +132,88 @@ a,img{border:0;}
 	line-height:30px;
 
 }
-#status_bar #status_2
+
+#status_bar #status_1 #q_skill
 {
-	height: 100%;
-	float: left;
-}
-#status_bar #status_2 #q_skill
-{
+	width : 70px;
 	height: 100%;
 	float: left;
 	box-shadow: 3px 3px 3px #666;  
+	padding :0px 10px;
 }
-#status_bar #status_2 #q_skill #bigq
+#status_bar #status_1 #q_skill #bigq
 {
 	float: left;
-	width:30%;
 	line-height:60px;
 	font-size: 60px;
 
 }
-#status_bar #status_2 #q_skill #q_cd
+#status_bar #status_1 #q_skill #q_cd
 {
 	float: left;
-	width:70%;
 	line-height:60px;
 	
 }
-#status_bar #status_2 #w_skill
+#status_bar #status_1 #w_skill
 {
+	width : 70px;
 	height: 100%;
-	width: 133px;
 	float: left;
 	box-shadow: 3px 3px 3px #666;  
+	padding :0px 10px;
 }
-#status_bar #status_2 #w_skill #bigw
+#status_bar #status_1 #w_skill #bigw
 {
 	float: left;
-	width:30%;
 	line-height:60px;
 	font-size: 60px;
 }
-#status_bar #status_2 #w_skill #w_cd
+#status_bar #status_1 #w_skill #w_cd
 {
 	float: left;
-	width:70%;
-	line-height:60px;
-}
-#status_bar #status_2 #e_skill
-{
-	height: 100%;
-	width: 133px;
-	float: left;
-}
-#status_bar #status_2 #e_skill #bige
-{
-	float: left;
-	width:30%;
-	line-height:60px;
-	font-size: 60px;
-}
-#status_bar #status_2 #e_skill #e_cd
-{
-	float: left;
-	width:70%;
 	line-height:60px;
 }
 
-#status_bar #status_3
+#status_bar #status_1 #e_skill
 {
+	width : 70px;
 	height: 100%;
-	width: 400px;
 	float: left;
+	padding :0px 10px;
+	box-shadow: 3px 3px 3px #666;  
 }
+#status_bar #status_1 #e_skill #bige
+{
+	float: left;
+	line-height:60px;
+	font-size: 60px;
+}
+#status_bar #status_1 #e_skill #e_cd
+{
+	float: left;
+	line-height:60px;
+}
+#status_bar #status_1 #Killsoider
+{
+	width : 240px;
+	height: 100%;
+	float: left;
+	padding :0px 10px;
+	box-shadow: 3px 3px 3px #666;
+}
+#status_bar #status_1 #Killsoider #kkk1
+{
+	float: top;
+	height:50%;
+	line-height:30px;
+}
+#status_bar #status_1 #Killsoider #kkk2
+{
+	float: top;
+	height:50%;
+	line-height:30px;
+}
+
 .play
 {
 	font-size: 140px;

@@ -28,9 +28,9 @@ var heroAttackRadius = 45, heroAttackInterval = 1000;				//英雄普通攻击范
 var heroSkill2Radius = 150, heroSkill3Speed = 100;					//英雄技能二攻击范围，技能三攻击速度
 var heroSkill3Border = 10;											//英雄技能三攻击速度
 var getExpRadius = 300;												//获取经验的间距
-var expLevel = [100, 300, 600, 1000, 1500, 2100, 2700, 3300, 3900, 100000];								//等级对应经验值
+var expLevel = [100, 300, 600, 1000, 1500, 2100, 2700, 3300, 3900, 9999];								//等级对应经验值
 var levelMax = 10;													//最大等级
-var gameover_kind,gameover_frame flagDebug1 = false, flagDebug2 = false;
+var gameover_kind,gameover_frame,flagDebug1 = false, flagDebug2 = false;
 
 
 var attackLevel = [60, 65, 70,75, 80, 85, 90, 95, 100, 105];									//英雄物理攻击
@@ -682,7 +682,7 @@ var towerClass ={									//塔的对象
 		towerRet.attack = towerAttack;										//攻击为持续攻击
 		towerRet.target = null;												//攻击对象
 		towerRet.makeExp = towerMakeExp;									//提供经验
-		towerRet.makeBlood = towerMakeHp;
+		towerRet.makeHp = towerMakeHp;
 		towerRet.perform = function(kind){
 			if (towerRet.nowHp <= 0)											//塔被毁坏时返回
 				return;
@@ -814,6 +814,12 @@ window.onkeydown = function(e){																	//键盘事件响应,'q','w','e'
 		if (allPicLeft < 0)
 			allPicLeft = 0;
 	}
+	else if (e.keyCode == 82){					//r
+		flagDebug1 = !flagDebug1;
+	}
+	else if (e.keyCode == 84){					//t
+		flagDebug2 = !flagDebug2;
+	}
 }
 CanvasCopy.onmousedown = function(e) {													//鼠标点击事件的响应
    	var tx = e.pageX - CanvasCopy.getBoundingClientRect().left  + allPicLeft;
@@ -880,7 +886,27 @@ function cycleOperation(){										//定时执行
 	checkDead();													//判断对象死亡
 	checkMargin();													//调整非法移动
 	checkAddLevel();												//判断等级增加
+	changeBar(Heroes[0][0]);
 	paintOn();														//绘制图形
+}
+function changeBar(obj){
+	$('#string').text(obj.name);
+	if (obj.buff.length > 0)
+		$('#level').text('Speed:'+Math.round(obj.speed+obj.buff[0].speed)+'(+'+Math.round(obj.buff[0].speed));
+	else
+		$('#level').text('Speed:'+Math.round(obj.speed));
+	if (obj.buff.length > 0)
+		$('#ad').text('Attack:'+Math.round(obj.skills[0].attack+obj.buff[0].attack)+'(+'+Math.round(obj.buff[0].attack));
+	else
+		$('#ad').text('Attack:'+Math.round(obj.skills[0].attack));
+	$('#hp').text('HP:'+obj.nowHp +'/'+obj.allHp);
+	
+	$('#buff').text('level:'+ obj.level +' (' + obj.exp + '/' + expLevel[obj.level] + ')');
+	$('#q_cd').text(Math.round(obj.skills[1].attackWait * frameTime / 1000));
+	$('#w_cd').text(Math.round(obj.skills[2].attackWait * frameTime / 1000));
+	$('#e_cd').text(Math.round(obj.skills[3].attackWait * frameTime / 1000));
+	$('#kkk1').text('Kill Soldiers: ' + obj.killSoldiers);
+	$('#kkk2').text('Kill Heroes: ' + obj.killHeroes);
 }
 function checkAddLevel(){
 	for (var k = 0; k < 2; k++)
@@ -1140,11 +1166,18 @@ function paintOn()													//将所有图画到canvas上
 		}
 		if (allObject[i].nowHp > 0)						//绘制血量条
 			drawNowHp(allObject[i]);
+		else if (allObject[i].idType == 'Hero' && allObject[i].nowDeathCD >=0 ){
+			cxt.font="20px Arial";
+			cxt.strokeStyle = 'rgb(245,251,42)';
+			cxt.fillText('剩余复活时间：'+Math.round(allObject[i].nowDeathCD * frameTime / 1000), allObject[i].positionX - allPicLeft - 32, allObject[i].positionY - allObject[i].top);
+		}
 		cxt.drawImage(img, allObject[i].positionX - allObject[i].picX - allPicLeft, allObject[i].positionY - allObject[i].picY);
 		cxt.strokeStyle="#0000ff";
-		cxt.strokeRect(allObject[i].positionX - allObject[i].left - allPicLeft, allObject[i].positionY - allObject[i].top,allObject[i].right + allObject[i].left,allObject[i].bottom + allObject[i].top);
+		if (flagDebug2)
+			cxt.strokeRect(allObject[i].positionX - allObject[i].left - allPicLeft, allObject[i].positionY - allObject[i].top,allObject[i].right + allObject[i].left,allObject[i].bottom + allObject[i].top);
 		cxt.beginPath();
-		cxt.arc(allObject[i].positionX - allPicLeft, allObject[i].positionY, allObject[i].positionRadius,0,  Math.PI*2, true);
+		if (flagDebug1)
+			cxt.arc(allObject[i].positionX - allPicLeft, allObject[i].positionY, allObject[i].positionRadius,0,  Math.PI*2, true);
 		cxt.stroke();
 	}
 	cxtCopy.drawImage(myCanvas, 0, 0);
