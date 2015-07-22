@@ -38,9 +38,10 @@ window.onload = function () {
 	var help = document.getElementsByClassName("help");
 	var startdom = document.getElementsByClassName("start");
 	m_start.play();
+	startdom[0].style.display = "block";
 	play[0].style.left = width/2 - play[0].offsetWidth-20 + "px";
 	help[0].style.left = width/2 + 20 + "px";
-	startdom[0].style.display = "block";
+
 	setInterval(draw, 33);
 	DOOT = document.getElementById("doot");
 	with(DOOT.style){
