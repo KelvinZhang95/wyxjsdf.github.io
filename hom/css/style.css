@@ -230,7 +230,7 @@ a,img{border:0;}
 	font-size: 140px;
 	position: absolute;
 	top:500px;
-	left:0;
+	left:40%;
 	/*margin-left: -90px;*/
 	z-index: 1000;
 }
@@ -256,7 +256,7 @@ a,img{border:0;}
 	font-size: 140px;
 	position: absolute;
 	top:500px;
-	left:0;
+	left:60%;
 	/*margin-left: 90px;*/
 	z-index: 1000;
 }
