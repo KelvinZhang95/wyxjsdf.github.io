@@ -10,7 +10,7 @@ var frameTime = 100;												//画面播放的间隔
 var CanvasCopy = document.getElementById("myCanvas");				//画布Canvas的Dom元素
 var allPicLeft;														//屏幕相对右移的距离
 var screenMoveSpeed = 60, screenMoveflag = 0;						//画面移动的速度和判定
-var screenMoveBorder = 20;											//响应移动判定的边界距离
+var screenMoveBorder = 150;											//响应移动判定的边界距离
 var addBloodRadius = 170;											//可以回血的大本营范围
 var addBloodRate = 0.01;											//单个间隔血量增加的百分比
 var cxtCopy=CanvasCopy.getContext("2d");							//绘画的句柄
@@ -18,20 +18,20 @@ var nowMouseX, nowMouseY;											//当前鼠标位置，相对全图
 var soldierAllHp = 300, soldierAttack = 20;							//小兵的血量、攻击力
 var soldierAttackRadius = 22;										//小兵的攻击范围
 var soldierAttackInterval = 1000, soldierSpeed = 10;				//小兵的攻击间隔(ms)，移动速度
-var soldierMakeExp = 20, soldierMakeHp = 10;						//小兵死亡所提供的经验、最后一击血量
-var towerAllHp = 2000, towerAttack = 5, towerAttackRadius = 150;	//塔的血量、攻击力、攻击距离（塔为放射型攻击）
+var soldierMakeExp = 20, soldierMakeHp = 50;						//小兵死亡所提供的经验、最后一击血量
+var towerAllHp = 2000, towerAttack = 8, towerAttackRadius = 150;	//塔的血量、攻击力、攻击距离（塔为放射型攻击）
 var towerMakeExp = 150, towerMakeHp = 80;							//塔毁灭所提供的经验、最后一击血量
 var campAllHp = 3000, campSoldierInterval = 30000;					//大本营的血量、大本营出兵的间隔
 var camSoldierNum = 3;												//大本营一次出兵的数量
-var heroMakeExp = 100, heroMakeHp = 50;								//击杀英雄所提供的经验、最后一击血量
+var heroMakeExp = 100, heroMakeHp = 350;								//击杀英雄所提供的经验、最后一击血量
 var heroAttackRadius = 45, heroAttackInterval = 1000;				//英雄普通攻击范围、间隔
-var heroSkill2Radius = 150, heroSkill3Speed = 100;					//英雄技能二攻击范围，技能三攻击速度
-var heroSkill3Border = 10;											//英雄技能三攻击速度
+var heroSkill2Radius = 190, heroSkill3Speed = 100;					//英雄技能二攻击范围，技能三攻击速度
+var heroSkill3Border = 10;											//英雄技能三攻击范围
 var getExpRadius = 300;												//获取经验的间距
 var expLevel = [100, 300, 600, 1000, 1500, 2100, 2700, 3300, 3900, 9999];								//等级对应经验值
 var levelMax = 10;													//最大等级
-var gameover_kind,gameover_frame,flagDebug1 = false, flagDebug2 = false;
-
+var gameover_kind,gameover_frame,flagDebug1 = false, flagDebug2 = false,over_temp;
+var all_volume = 1.0,volume_set = 1;											//整体音量 用户音乐设置
 
 var attackLevel = [60, 65, 70,75, 80, 85, 90, 95, 100, 105];									//英雄物理攻击
 var speedLevel = [16, 16, 17, 17, 18, 18, 19, 19, 20, 20];										//英雄的速度
@@ -43,8 +43,8 @@ var skill1SpeedLevel = [0.9, 0.9, 0.9, 1.0, 1.0, 1.0, 1.1, 1.1, 1.2, 1.2];						
 var skill1BuffLevel = [4000, 4000, 4000, 4000, 4000, 4500, 4500, 4500, 4500, 5000];				//技能一buff时间
 var skill1CDLevel = [8000, 8000, 7500, 7500, 7500, 7000, 7000, 7000, 6500, 6500];				//技能一CD时间
 var skill2CDLevel = [10000, 10000, 9500, 9500, 9000, 9000, 8500, 8500, 8000, 8000];				//技能二CD时间
-var skill3CDLevel = [35000, 34000, 33000, 32000, 31000, 30000, 29000, 28000, 27000, 26000];		//技能三CD时间
-var deathLevel = [10000, 10000, 12000, 12000, 12000, 12000, 12000, 13000, 13000, 13000];		//英雄死亡等待时间
+var skill3CDLevel = [30000, 29000, 28000,27000, 26000, 25000, 24000, 23000, 22000, 21000];		//技能三CD时间
+var deathLevel = [10000, 12000, 14000, 16000, 18000, 19000, 20000, 21000, 22000, 23000];		//英雄死亡等待时间
 
 var myCanvas = document.createElement('canvas');					//用于双缓冲的画布
 var cxt = myCanvas.getContext("2d");
@@ -170,19 +170,21 @@ function gameOver(kind){	//游戏结束的响应，kind为失败方
 	clearInterval(MyInterval);
 	gameover_frame = 0;
 	gameover_kind = kind;
-	var temp = setInterval("draw_gameOver()",50)	;												
+	over_temp = setInterval("draw_gameOver()",50)	;												
 	//alert('gameOver');
 	document.getElementById("replaybutton").style.display = "block";
-//	initial();
-//	document.getElementById("replaybutton").style.display = "none";
-//	clearInterval(temp);
 
+
+}
+function overtoreplay(){
+	initial();
+	document.getElementById("replaybutton").style.display = "none";
+	clearInterval(over_temp);
 }
 function draw_gameOver(){
 	
 	if(gameover_frame <= 60){
-		cxtCopy.fillStyle="#0000ff";
-		//cxtCopy.clearRect(0,0,1200,600);
+		cxtCopy.fillStyle="#f5fa2a";
 		cxtCopy.fillRect(0,0,10*gameover_frame,600);
 		cxtCopy.fillRect(1200 - 10*gameover_frame,0,10*gameover_frame,600);
 		gameover_frame++;
@@ -795,7 +797,7 @@ window.onmousemove = function(e) {
 		screenMoveflag = 2;
 	else screenMoveflag = 0;
 }
-window.onkeydown = function(e){																	//键盘事件响应,'q','w','e'放技能，‘space’返回到英雄位置
+window.onkeydown = function(e){																	//键盘事件响应,'q','w','e'放技能，‘space’返回到英雄位置 p关闭音乐
 	if (e.keyCode == 81){
 		Heroes[0][0].nowAction = 1;
 	}
@@ -819,6 +821,31 @@ window.onkeydown = function(e){																	//键盘事件响应,'q','w','e'
 	}
 	else if (e.keyCode == 84){					//t
 		flagDebug2 = !flagDebug2;
+	}
+	else if(e.keyCode == 80){					//p
+		if(volume_set === 1){
+			fight_back.volume = 0;
+			beijing.volume = 0;
+			m_start.volume = 0;
+			fighter_w.volume = 0;
+			fighter_e.volume = 0;
+			fighter_a.volume = 0;
+			click.volume = 0;
+			fighter_q.volume = 0;
+			volume_set = 0;
+		}
+		else 
+		{
+			fight_back.volume = all_volume;
+			beijing.volume = all_volume;
+			m_start.volume = all_volume;
+			fighter_w.volume = all_volume;
+			fighter_e.volume = all_volume;
+			fighter_a.volume = all_volume;
+			click.volume = all_volume;
+			fighter_q.volume = all_volume;
+			volume_set = 1;
+		}	
 	}
 }
 CanvasCopy.onmousedown = function(e) {													//鼠标点击事件的响应
@@ -892,11 +919,11 @@ function cycleOperation(){										//定时执行
 function changeBar(obj){
 	$('#string').text(obj.name);
 	if (obj.buff.length > 0)
-		$('#level').text('Speed:'+Math.round(obj.speed+obj.buff[0].speed)+'(+'+Math.round(obj.buff[0].speed));
+		$('#level').text('Speed:'+Math.round(obj.speed+obj.buff[0].speed)+'(+'+Math.round(obj.buff[0].speed) + ")");
 	else
 		$('#level').text('Speed:'+Math.round(obj.speed));
 	if (obj.buff.length > 0)
-		$('#ad').text('Attack:'+Math.round(obj.skills[0].attack+obj.buff[0].attack)+'(+'+Math.round(obj.buff[0].attack));
+		$('#ad').text('Attack:'+Math.round(obj.skills[0].attack+obj.buff[0].attack)+'(+'+Math.round(obj.buff[0].attack)+ ")");
 	else
 		$('#ad').text('Attack:'+Math.round(obj.skills[0].attack));
 	$('#hp').text('HP:'+obj.nowHp +'/'+obj.allHp);

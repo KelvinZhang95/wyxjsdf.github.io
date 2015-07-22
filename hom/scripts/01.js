@@ -71,6 +71,10 @@ function play(){
 	mode = 2;
 	
 }
+function help(){
+
+	window.open("otherpage/help.html");
+}
 function skip(){
 	if (!flag)
 		return;
