@@ -9,7 +9,7 @@ var baseCamp;														//大本营的对象数组
 var frameTime = 100;												//画面播放的间隔
 var CanvasCopy = document.getElementById("myCanvas");				//画布Canvas的Dom元素
 var allPicLeft;														//屏幕相对右移的距离
-var screenMoveSpeed = 30, screenMoveflag = 0;						//画面移动的速度和判定
+var screenMoveSpeed = 60, screenMoveflag = 0;						//画面移动的速度和判定
 var screenMoveBorder = 20;											//响应移动判定的边界距离
 var addBloodRadius = 170;											//可以回血的大本营范围
 var addBloodRate = 0.01;											//单个间隔血量增加的百分比
@@ -173,9 +173,9 @@ function gameOver(kind){	//游戏结束的响应，kind为失败方
 	var temp = setInterval("draw_gameOver()",50)	;												
 	//alert('gameOver');
 	document.getElementById("replaybutton").style.display = "block";
-	initial();
-	document.getElementById("replaybutton").style.display = "none";
-	clearInterval(temp);
+//	initial();
+//	document.getElementById("replaybutton").style.display = "none";
+//	clearInterval(temp);
 
 }
 function draw_gameOver(){
