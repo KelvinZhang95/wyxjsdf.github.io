@@ -173,9 +173,9 @@ function gameOver(kind){	//游戏结束的响应，kind为失败方
 	var temp = setInterval("draw_gameOver()",50)	;												
 	//alert('gameOver');
 	document.getElementById("replaybutton").style.display = "block";
-//	initial();
-//	document.getElementById("replaybutton").style.display = "none";
-//	clearInterval(temp);
+	initial();
+	document.getElementById("replaybutton").style.display = "none";
+	clearInterval(temp);
 
 }
 function draw_gameOver(){
@@ -417,18 +417,7 @@ var heroClass ={															//玩家控制英雄的对象
 			
 			if (checkHeroAttackKind(heroRet.action.kind) >= 0 && heroRet.action.frame === 0){					//英雄一次攻击结束，转为静止状态
 				if (checkHeroAttackKind(heroRet.action.kind) == 2){												//技能二造成范围伤害
-					for (var i = 0; i < Soldiers[1 - heroRet.kind].length; i++){
-						var p = getDis(heroRet.positionX, heroRet.positionY, Soldiers[1 - heroRet.kind][i]);
-						if (p <= heroRet.skills[2].attackRadius){
-							Soldiers[1 - heroRet.kind][i].attacked(heroRet.skills[2].attack, heroRet);
-						}
-					}
-					for (var i = 0; i < Heroes[1 - heroRet.kind].length; i++){
-						var p = getDis(heroRet.positionX, heroRet.positionY, Heroes[1 - heroRet.kind][i]);
-						if (p <= heroRet.skills[2].attackRadius){
-							Heroes[1 - heroRet.kind][i].attacked(heroRet.skills[2].attack, heroRet);
-						}
-					}
+
 				}
 				else if (checkHeroAttackKind(heroRet.action.kind) == 3){
 				}
@@ -458,7 +447,18 @@ var heroClass ={															//玩家控制英雄的对象
 					heroRet.skills[2].attackWait = heroRet.skills[2].attackInterval;
 					heroRet.skills[2].attack = heroRet.skills[0].attack * (1 + heroRet.skills[2].attackRate);
 					heroRet.nowAction = 0;
-				}
+					for (var i = 0; i < Soldiers[1 - heroRet.kind].length; i++){
+						var p = getDis(heroRet.positionX, heroRet.positionY, Soldiers[1 - heroRet.kind][i]);
+						if (p <= heroRet.skills[2].attackRadius){
+							Soldiers[1 - heroRet.kind][i].attacked(heroRet.skills[2].attack, heroRet);
+						}
+					}
+					for (var i = 0; i < Heroes[1 - heroRet.kind].length; i++){
+						var p = getDis(heroRet.positionX, heroRet.positionY, Heroes[1 - heroRet.kind][i]);
+						if (p <= heroRet.skills[2].attackRadius){
+							Heroes[1 - heroRet.kind][i].attacked(heroRet.skills[2].attack, heroRet);
+						}
+					}				}
 				else if (heroRet.nowAction == 3 && heroRet.skills[3].attackWait == 0){								//如有技能3的指令且无CD则执行
 					fighter_e.play();
 					if (nowMouseX < heroRet.positionX)
@@ -586,7 +586,10 @@ var heroClass ={															//玩家控制英雄的对象
 			heroRet.positionObj = null;
 			heroRet.nowAction = 0;
 			if (heroRet.nowHp <= 0.2 * heroRet.allHp){
-				heroRet.positionTo = {x:3500, y:400};
+				if (kind == 1)
+					heroRet.positionTo = {x:3500, y:400};
+				else
+					heroRet.positionTo = {x:100, y:400};
 				return;
 			}
 			if (((kind == 1 && heroRet.positionX > 3600 - addBloodRadius)||(kind == 0 && heroRet.positionX < addBloodRadius)) && heroRet.nowHp < heroRet.allHp){
@@ -609,10 +612,10 @@ var heroClass ={															//玩家控制英雄的对象
 			}
 			for (var i = 0; i < Heroes[1 - kind].length; i++){
 				var p = getDis(heroRet.positionX, heroRet.positionY, Heroes[1 - kind][i]);
-				if (kind == 1 && i == 0 && p < heroRet.skills[3].attackSpeed * 5 && heroRet.skills[3].attackWait == 0)
+				if (p < heroRet.skills[3].attackSpeed * 5 && heroRet.skills[3].attackWait == 0)
 				{
-					nowMouseX = Heroes[0][0].positionX;
-					nowMouseY = Heroes[0][0].positionY;
+					nowMouseX = Heroes[1-kind][i].positionX;
+					nowMouseY = Heroes[1-kind][i].positionY;
 					heroRet.nowAction = 3;
 					return;
 				}
@@ -856,7 +859,9 @@ function initial(){																			//初始化过程
 	Towers[1].push(towerClass.createNew(3146.18,532.18,3142.18,421.18,35,35,118.5,11,37,74,141, 'towerSmall', 1));
 	Towers[1].push(towerClass.createNew(2226,413,2221,268,47,47,157.5,21,53.5,75,161, 'towerBig', 1));
 	Heroes[0].push(heroClass.createNew(100, 400, 0, 'Player'));																	//加入英雄
-	Heroes[1].push(heroClass.createNew(3500, 400, 1, 'Computer'));																	//加入英雄
+	Heroes[1].push(heroClass.createNew(3500, 400, 1, 'Computer 1'));																	//加入英雄
+	Heroes[0].push(heroClass.createNew(100, 360, 0, 'Computer 3'));																	//加入英雄
+	Heroes[1].push(heroClass.createNew(3500, 440, 1, 'Computer 2'));																	//加入英雄
 	MyInterval = setInterval(cycleOperation, frameTime);					//计时函数
 
 }
@@ -1141,10 +1146,10 @@ function paintOn()													//将所有图画到canvas上
 				cxt.beginPath();
 				var grd=cxt.createRadialGradient(75,50,5,90,60,100);
 				grd.addColorStop(0,"red");
-				grd.addColorStop(1,"white");
+				grd.addColorStop(1,"rgb(255,255,0)");
 				cxt.strokeStyle=grd;
 				cxt.shadowBlur=20;
-				cxt.shadowColor="black";
+				cxt.shadowColor="white";
 				cxt.lineWidth = allObject[i].skills[3].attackBorder;
 				//cxt.strokeStyle = 'rgb(245,250,42)';
 				cxt.moveTo(px - allPicLeft, py);
