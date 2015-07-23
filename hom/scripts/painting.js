@@ -300,7 +300,7 @@ var soldierClass ={											//小兵的对象
 				if (obj.idType == 'Hero')
 					obj.killSoldiers++;
 				if (obj.nowHp > obj.allHp)
-					obj.allHp = obj.nowHp;
+					obj.nowHp = obj.allHp;
 				for (var i = 0; i < Heroes[1 - soldierRet.kind].length; i++){
 					var p = getDis(soldierRet.positionX, soldierRet.positionY, Heroes[1 - soldierRet.kind][i]);
 					if (p < getExpRadius){
