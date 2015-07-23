@@ -1152,8 +1152,8 @@ function paintOn()													//将所有图画到canvas上
 			if (checkHeroAttackKind(allObject[i].action.kind) == 0){
 				if (allObject[i].buff.length > 0){								//有buff时展现不同的攻击效果
 					img= actionFlash[allObject[i].action.kind + 14].src[0][allObject[i].action.frame];
-					if (allObject[i].action.frame == actionFlash[allObject[i].action.kind + 14].len - 1)
-						allObject[i].buff.splice(0, 1);
+//					if (allObject[i].action.frame == actionFlash[allObject[i].action.kind + 14].len - 1)
+//						allObject[i].buff.splice(0, 1);
 				}
 			}
 			else if (checkHeroAttackKind(allObject[i].action.kind) == 2){		//技能二绘制叠加效果图
